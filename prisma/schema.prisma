@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1 User to many Contents
+// 1 User to many Comments
+model User {
+  id String @id @default(uuid()) 
+  username String @unique
+  password String
+  name String
+  surname String
+  email String @unique
+  phoneNumber String @unique
+  address String
+  province Province
+  postcode String
+  registeredAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  contents Content[]
+  comments Comment[]
+}
+
+// 1 Content to many Comments
+model Content {
+  id Int @id @default(autoincrement())
+  usedId String
+  user User @relation(fields: [usedId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isArchive Boolean @default(false)
+  name String
+  surname String
+  nickname String
+  img String
+  nationality Nationality 
+  ageLastSeen Int
+  dateOfBirth DateTime
+  gender Gender
+  weight Int
+  height Int
+  skin Skin 
+  remark String
+  status Status
+  province Province
+  place String
+  missingDatetime DateTime
+  missingDetail String
+  comments Comment[]
+}
+
+
+model Comment {
+  comment_id Int @id @default(autoincrement())
+  contentId Int
+  content Content @relation(fields: [contentId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  foundPlace String
+  foundDatetime DateTime
+  foundDetail String
+  img String
+  isArchive Boolean @default(false)
+}
+
+enum Nationality {
+  THAI
+  NONTHAI
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Skin {
+  WHITE
+  WHITEYELLOW
+  WHITERED
+  BLACK
+  BLACKYELLOW
+  BLACKRED
+  NORNAL
+}
+
+enum Status {
+  UNFOUNED
+  FOUNDED
+}
+
+enum Province {
+  BANGKOK
+  KRABI
+  KANCHANABURI
+  KALASIN
+  KAMPHAENGPHET
+  KHONKAEN
+  CHANTHABURI
+  CHACHOENGSAO
+  CHONBURI
+  CHAINAT
+  CHAIYAPHUM
+  CHUMPHON
+  CHIANGRAI
+  CHIANGMAI
+  TRANG
+  TRAT
+  TAK
+  NAKHONNAYOK
+  NAKHONPATHOM
+  NAKHONPHANOM
+  NAKHONRATCHASIMA
+  NAKHONSITHAMMARAT
+  NAKHONSAWAN
+  NONTHABURI
+  NARATHIWAT
+  NAN
+  BUENGKAN
+  BURIRAM
+  PATHUMTHANI
+  PRACHUAPKHIRIKHAN
+  PRACHINBURI
+  PATTANI
+  PHRANAKHONSIAYUTTHAYA
+  PHAYAO
+  PHANGNGA
+  PHATTHALUNG
+  PHICHIT
+  PHITSANULOK
+  PHETCHABURI
+  PHETCHABUN
+  PHRAE
+  PHUKET
+  MAHASARAKHAM
+  MUKDAHAN
+  MAEHONGSON
+  YASOTHON
+  YALA
+  ROIET
+  RANONG
+  RAYONG
+  RATCHABURI
+  LOPBURI
+  LAMPANG
+  LAMPHUN
+  LOEI
+  SISAKET
+  SAKONNAKHON
+  SONGKHLA
+  SATUN
+  SAMUTPRAKAN
+  SAMUTSONGKHRAM
+  SAMUTSAKHON
+  SAKAEO
+  SARABURI
+  SINGBURI
+  SUKHOTHAI
+  SUPHANBURI
+  SURATTHANI
+  SURIN
+  NONGKHAI
+  NONGBUALAMPHU
+  ANGTHONG
+  AMNATCHAROEN
+  UDONTHANI
+  UTTARADIT
+  UTHAITHANI
+  UBONRATCHATHANI
+}
+
+
+
+
+
