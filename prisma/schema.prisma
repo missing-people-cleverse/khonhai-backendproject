@@ -32,8 +32,8 @@ model User {
 // 1 Content to many Comments
 model Content {
   id Int @id @default(autoincrement())
-  usedId String
-  user User @relation(fields: [usedId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isArchive Boolean @default(false)
@@ -59,7 +59,7 @@ model Content {
 
 
 model Comment {
-  comment_id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   contentId Int
   content Content @relation(fields: [contentId], references: [id])
   userId String
@@ -90,7 +90,7 @@ enum Skin {
   BLACK
   BLACKYELLOW
   BLACKRED
-  NORNAL
+  NORMAL
 }
 
 enum Status {

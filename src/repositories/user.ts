@@ -32,4 +32,16 @@ class RepositoryUser implements IRepositoryUser {
       })
       .catch((err) => Promise.reject(`failed to get user ${username}: ${err}`));
   }
+
+  async getUserById(id: string): Promise<IUser> {
+    return await this.db.user
+      .findUnique({ where: { id } })
+      .then((user) => {
+        if (!user) {
+          return Promise.reject(`this user ${id} does not exist`);
+        }
+        return Promise.resolve(user);
+      })
+      .catch((err) => Promise.reject(`failed to get user ${id}: ${err}`));
+  }
 }

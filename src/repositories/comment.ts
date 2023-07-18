@@ -1,0 +1,71 @@
+import { PrismaClient } from "@prisma/client";
+import { IComment, ICreateComment, IUpdateComment } from "../entities";
+import { IRepositoryComment } from ".";
+
+export function newRepositoryComment(db: PrismaClient): IRepositoryComment {
+  return new RepositoryComment(db);
+}
+
+class RepositoryComment implements IRepositoryComment {
+  db: PrismaClient;
+
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+
+  async createComment(comment: ICreateComment): Promise<IComment> {
+    return this.db.comment.create({
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        content: {
+          select: {
+            id: true,
+          },
+        },
+      },
+      data: {
+        ...comment,
+        userId: undefined,
+        contentId: undefined,
+        user: {
+          connect: {
+            id: comment.userId,
+          },
+        },
+        content: {
+          connect: {
+            id: comment.contentId,
+          },
+        },
+      },
+    });
+  }
+  async getComments(): Promise<IComment[]> {
+    return this.db.comment.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        content: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+  async updateComment(id: number, comment: IUpdateComment): Promise<IComment> {
+    return await this.db.comment.update({
+      where: { id },
+      data: { ...comment },
+    });
+  }
+}
