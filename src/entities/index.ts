@@ -12,17 +12,8 @@ export interface ICreateUser {
   postcode: string;
 }
 
-export interface IUser {
+export interface IUser extends ICreateUser {
   id: string;
-  username: string;
-  password: string;
-  name: string;
-  surname: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  province: Province;
-  postcode: string;
   registeredAt: Date;
   updatedAt: Date;
 }
@@ -94,4 +85,9 @@ export interface IUpdateComment {
   foundDetail: string;
   img: string;
   isArchive: boolean;
+}
+
+export interface IDeleteContent {
+  isArchive: boolean;
+  status: Status;
 }

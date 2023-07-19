@@ -82,8 +82,9 @@ export interface WithContentUpdate {
 export interface IHandlerContent {
   createContent: HandlerFunc<JwtAuthRequest<Empty, WithContent>>;
   getContents: HandlerFunc<JwtAuthRequest<Empty, Empty>>;
-  getContent: HandlerFunc<JwtAuthRequest<WithContentId, WithContent>>;
+  getContent: HandlerFunc<JwtAuthRequest<WithContentId, Empty>>;
   updateContent: HandlerFunc<JwtAuthRequest<WithContentId, WithContentUpdate>>;
+  deleteContent: HandlerFunc<JwtAuthRequest<WithContentId, WithContentDelete>>;
 }
 
 export interface WithComment {
@@ -110,4 +111,14 @@ export interface IHandlerComment {
   createComment: HandlerFunc<JwtAuthRequest<WithContentId, WithComment>>;
   getComments: HandlerFunc<JwtAuthRequest<Empty, Empty>>;
   updateComment: HandlerFunc<JwtAuthRequest<WithCommentId, WithCommentUpdate>>;
+  deleteComment: HandlerFunc<JwtAuthRequest<WithCommentId, WithCommentDelete>>;
+}
+
+export interface WithContentDelete {
+  isArchive: boolean;
+  status: Status;
+}
+
+export interface WithCommentDelete {
+  isArchive: boolean;
 }

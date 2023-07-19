@@ -4,6 +4,7 @@ import { Response } from "express";
 import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
 import { AppRequest, Empty, IHandlerUser, WithUser, WithUserId } from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
+import { ICreateUser } from "../entities";
 
 export function newHandlerUser(
   repo: IRepositoryUser,
@@ -24,43 +25,26 @@ class HandlerUser implements IHandlerUser {
     req: AppRequest<Empty, WithUser>,
     res: Response
   ): Promise<Response> {
-    const {
-      username,
-      password,
-      name,
-      surname,
-      email,
-      phoneNumber,
-      address,
-      province,
-      postcode,
-    } = req.body;
+    const userRegister: ICreateUser = req.body;
 
     if (
-      !username ||
-      !password ||
-      !name ||
-      !surname ||
-      !email ||
-      !phoneNumber ||
-      !address ||
-      !province ||
-      !postcode
+      !userRegister.username ||
+      !userRegister.password ||
+      !userRegister.name ||
+      !userRegister.surname ||
+      !userRegister.email ||
+      !userRegister.phoneNumber ||
+      !userRegister.address ||
+      !userRegister.province ||
+      !userRegister.postcode
     ) {
-      return res.status(400).json({ error: "missing information" });
+      return res.status(400).json({ error: "missing information" }).end();
     }
 
     return this.repo
       .createUser({
-        username,
-        password: hashPassword(password),
-        name,
-        surname,
-        email,
-        phoneNumber,
-        address,
-        province,
-        postcode,
+        ...userRegister,
+        password: hashPassword(userRegister.password),
       })
       .then((user) => {
         console.log(user.email);
@@ -72,7 +56,7 @@ class HandlerUser implements IHandlerUser {
       .catch((err) =>
         res
           .status(500)
-          .json({ error: `failed to register user ${username}` })
+          .json({ error: `failed to register user ${userRegister.username}` })
           .end()
       );
   }
@@ -114,7 +98,10 @@ class HandlerUser implements IHandlerUser {
       })
       .catch((err) => {
         console.error(`failed to get user: ${err}`);
-        return res.status(500).end();
+        return res
+          .status(500)
+          .json({ error: `failed to get user: ${err}` })
+          .end();
       });
   }
 

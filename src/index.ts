@@ -44,6 +44,9 @@ async function main() {
   const contentRouter = express.Router();
   const commentRouter = express.Router();
 
+  var cors = require("cors");
+  server.use(cors());
+
   server.use(express.json());
   server.use("/user", userRouter);
   server.use("/content", contentRouter);
@@ -83,6 +86,11 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerContent.updateContent.bind(handlerContent)
   );
+  contentRouter.delete(
+    "/delete/:id",
+    middleware.jwtMiddleware.bind(middleware),
+    handlerContent.deleteContent.bind(handlerContent)
+  );
 
   //Comment API
   commentRouter.post(
@@ -95,6 +103,11 @@ async function main() {
     "/edit/:id",
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.updateComment.bind(handlerComment)
+  );
+  commentRouter.delete(
+    "/delete/:id",
+    middleware.jwtMiddleware.bind(middleware),
+    handlerComment.deleteComment.bind(handlerComment)
   );
 
   server.listen(port, () => console.log(`server listening on ${port}`));

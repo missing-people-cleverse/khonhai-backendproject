@@ -3,6 +3,7 @@ import {
   Empty,
   IHandlerContent,
   WithContent,
+  WithContentDelete,
   WithContentId,
   WithContentUpdate,
 } from ".";
@@ -28,26 +29,25 @@ class HandlerContent implements IHandlerContent {
   ): Promise<Response> {
     const content: WithContent = req.body;
 
-    //check what requird
+    //user has to fill every details of content
     if (
-      !content.ageLastSeen
-      // !content.dateOfBirth ||
-      // !content.gender ||
-      // !content.height ||
-      // !content.img ||
-      // !content.isArchive ||
-      // !content.missingDatetime ||
-      // !content.missingDetail ||
-      // !content.name ||
-      // !content.nationality ||
-      // !content.nickname ||
-      // !content.place ||
-      // !content.province ||
-      // !content.remark ||
-      // !content.skin ||
-      // !content.status ||
-      // !content.surname ||
-      // !content.weight
+      !content.ageLastSeen ||
+      !content.dateOfBirth ||
+      !content.gender ||
+      !content.height ||
+      !content.img ||
+      !content.missingDatetime ||
+      !content.missingDetail ||
+      !content.name ||
+      !content.nationality ||
+      !content.nickname ||
+      !content.place ||
+      !content.province ||
+      !content.remark ||
+      !content.skin ||
+      !content.status ||
+      !content.surname ||
+      !content.weight
     ) {
       return res.status(400).json({ error: "missing information" }).end();
     }
@@ -61,7 +61,7 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to create content: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to create content` })
+          .json({ error: `failed to create content: ${err}` })
           .end();
       });
   }
@@ -75,12 +75,15 @@ class HandlerContent implements IHandlerContent {
       .then((contents) => res.status(201).json(contents).end())
       .catch((err) => {
         console.error(`failed to get contents: ${err}`);
-        return res.status(500).json({ error: `failed to get contents` }).end();
+        return res
+          .status(500)
+          .json({ error: `failed to get contents : ${err}` })
+          .end();
       });
   }
 
   async getContent(
-    req: JwtAuthRequest<WithContentId, WithContent>,
+    req: JwtAuthRequest<WithContentId, Empty>,
     res: Response
   ): Promise<Response> {
     const id = Number(req.params.id);
@@ -122,16 +125,15 @@ class HandlerContent implements IHandlerContent {
         .end();
     }
 
-    const content: WithContent = req.body;
+    const content: WithContentUpdate = req.body;
 
-    //check what requird
+    //user has to fill every details of update content
     if (
       !content.ageLastSeen ||
       !content.dateOfBirth ||
       !content.gender ||
       !content.height ||
       !content.img ||
-      !content.isArchive ||
       !content.missingDatetime ||
       !content.missingDetail ||
       !content.missingDetail ||
@@ -157,6 +159,38 @@ class HandlerContent implements IHandlerContent {
         return res
           .status(500)
           .json({ error: `failed to update content ${id}: ${err}` })
+          .end();
+      });
+  }
+
+  async deleteContent(
+    req: JwtAuthRequest<WithContentId, WithContentDelete>,
+    res: Response
+  ): Promise<Response> {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res
+        .status(400)
+        .json({ error: `id ${id} is not a number` })
+        .end();
+    }
+
+    const content: WithContentDelete = req.body;
+
+    //user has to fill every details of delete content
+    if (!content.isArchive || !content.status) {
+      return res.status(400).json({ error: "missing information" }).end();
+    }
+
+    return this.repo
+      .deleteContent(id, { ...content })
+      .then((deleted) => res.status(201).json(deleted).end())
+      .catch((err) => {
+        console.error(`failed to delete content ${id}: ${err}`);
+        return res
+          .status(500)
+          .json({ error: `failed to delete content ${id}: ${err}` })
           .end();
       });
   }

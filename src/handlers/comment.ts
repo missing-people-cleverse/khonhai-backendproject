@@ -4,6 +4,7 @@ import {
   Empty,
   IHandlerComment,
   WithComment,
+  WithCommentDelete,
   WithCommentId,
   WithCommentUpdate,
   WithContentId,
@@ -31,11 +32,10 @@ class HandlerComment {
 
     //check what requird
     if (
-      !comment.foundDatetime
-      //   !comment.foundDetail ||
-      //   !comment.foundPlace ||
-      //   !comment.img ||
-      //   !comment.isArchive
+      !comment.foundDatetime ||
+      !comment.foundDetail ||
+      !comment.foundPlace ||
+      !comment.img
     ) {
       return res.status(400).json({ error: "missing information" }).end();
     }
@@ -57,7 +57,7 @@ class HandlerComment {
         console.error(`failed to create comment: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to create comment` })
+          .json({ error: `failed to create comment: ${err}` })
           .end();
       });
   }
@@ -71,7 +71,10 @@ class HandlerComment {
       .then((comments) => res.status(201).json(comments).end())
       .catch((err) => {
         console.error(`failed to get comments: ${err}`);
-        return res.status(500).json({ error: `failed to get comments` }).end();
+        return res
+          .status(500)
+          .json({ error: `failed to get comments: ${err}` })
+          .end();
       });
   }
 
@@ -90,15 +93,12 @@ class HandlerComment {
 
     const comment: WithComment = req.body;
 
-    console.log(comment);
-
-    //check what requird
+    //user has to fill every details of update comment
     if (
       !comment.foundDatetime ||
       !comment.foundDetail ||
       !comment.foundPlace ||
-      !comment.img ||
-      comment.isArchive
+      !comment.img
     ) {
       return res.status(400).json({ error: "missing information" }).end();
     }
@@ -111,6 +111,37 @@ class HandlerComment {
         return res
           .status(500)
           .json({ error: `failed to update comment ${id}: ${err}` })
+          .end();
+      });
+  }
+  async deleteComment(
+    req: JwtAuthRequest<WithCommentId, WithCommentDelete>,
+    res: Response
+  ): Promise<Response> {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res
+        .status(400)
+        .json({ error: `id ${id} is not a number` })
+        .end();
+    }
+
+    const comment: WithCommentDelete = req.body;
+
+    //user has to fill every details of delete conmment
+    if (!comment.isArchive) {
+      return res.status(400).json({ error: "missing information" }).end();
+    }
+
+    return this.repo
+      .deleteComment(id, { ...comment })
+      .then((deleted) => res.status(201).json(deleted).end())
+      .catch((err) => {
+        console.error(`failed to delete comment ${id}: ${err}`);
+        return res
+          .status(500)
+          .json({ error: `failed to delete comment ${id}: ${err}` })
           .end();
       });
   }

@@ -14,7 +14,7 @@ class RepositoryComment implements IRepositoryComment {
   }
 
   async createComment(comment: ICreateComment): Promise<IComment> {
-    return this.db.comment.create({
+    return await this.db.comment.create({
       include: {
         user: {
           select: {
@@ -46,7 +46,7 @@ class RepositoryComment implements IRepositoryComment {
     });
   }
   async getComments(): Promise<IComment[]> {
-    return this.db.comment.findMany({
+    return await this.db.comment.findMany({
       include: {
         user: {
           select: {
@@ -68,4 +68,31 @@ class RepositoryComment implements IRepositoryComment {
       data: { ...comment },
     });
   }
+
+  async deleteComment(
+    id: number,
+    comment: IDeleteComment
+  ): Promise<IDeleteComment> {
+    return await this.db.comment.update({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        content: {
+          select: {
+            id: true,
+          },
+        },
+      },
+      data: { ...comment },
+    });
+  }
+}
+
+export interface IDeleteComment {
+  isArchive: boolean;
 }

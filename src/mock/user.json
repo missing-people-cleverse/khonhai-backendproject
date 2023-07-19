@@ -2,6 +2,7 @@
   {
     "id": "1aa",
     "username": "kittipong_s",
+    "password": "12345678",
     "name": "กิตติพงษ์",
     "surname": "สุทธิวรรณ",
     "email": "kittipong.s@example.com",
@@ -15,6 +16,7 @@
   {
     "id": "1ab",
     "username": "nattawit_j",
+    "password": "12345678",
     "name": "ณัฐวิทย์",
     "surname": "จันทร์แจ้ง",
     "email": "nattawit.j@example.com",
@@ -28,6 +30,7 @@
   {
     "id": "1ac",
     "username": "passakorn_s",
+    "password": "12345678",
     "name": "ภาสกร",
     "surname": "สุขสวัสดิ์",
     "email": "passakorn.s@example.com",
@@ -41,6 +44,7 @@
   {
     "id": "1ad",
     "username": "surapong_w",
+    "password": "12345678",
     "name": "สุรพล",
     "surname": "วงศ์มีชัย",
     "email": "test@gmail.com",
@@ -54,6 +58,7 @@
   {
     "id": "1ae",
     "username": "supakorn_t",
+    "password": "12345678",
     "name": "ศุภกร",
     "surname": "ทองสุนทร",
     "email": "supakorn.t@example.com",
@@ -67,6 +72,7 @@
   {
     "id": "1af",
     "username": "nattapong_m",
+    "password": "12345678",
     "name": "ณัฐพงศ์",
     "surname": "มั่งสวัสดิ์",
     "email": "nattapong.m@example.com",
@@ -80,6 +86,7 @@
   {
     "id": "1ag",
     "username": "wipawee_w",
+    "password": "12345678",
     "name": "วิภาวี",
     "surname": "วัฒนศิริ",
     "email": "wipawee.w@example.com",
@@ -93,6 +100,7 @@
   {
     "id": "1ah",
     "username": "pravit_p",
+    "password": "12345678",
     "name": "ประวิทย์",
     "surname": "พงษ์วิสุทธิ์",
     "email": "pravit.p@example.com",
@@ -106,6 +114,7 @@
   {
     "id": "1ai",
     "username": "thanapol_s",
+    "password": "12345678",
     "name": "ธนพล",
     "surname": "สุขแสง",
     "email": "thanapol.s@example.com",
@@ -119,6 +128,7 @@
   {
     "id": "1aj",
     "username": "nattawarat_v",
+    "password": "12345678",
     "name": "ณัฐวรรธน์",
     "surname": "วิเชียรบุรุษ",
     "email": "nattawarat_v",
@@ -132,6 +142,7 @@
   {
     "id": "1ak",
     "username": "weerawat_s",
+    "password": "12345678",
     "name": "วีรวัฒน์",
     "surname": "สุทธิวิชัย",
     "email": "weerawat.s@example.com",
@@ -145,6 +156,7 @@
   {
     "id": "1al",
     "username": "nattapong_s",
+    "password": "12345678",
     "name": "ณัฐพงศ์",
     "surname": "ศรีสุข",
     "email": "nattapong.s@example.com",
