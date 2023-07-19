@@ -62,6 +62,7 @@ class HandlerComment {
       });
   }
 
+  // unused
   async getComments(
     req: JwtAuthRequest<Empty, Empty>,
     res: Response

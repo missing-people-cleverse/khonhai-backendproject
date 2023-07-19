@@ -25,6 +25,8 @@ class RepositoryContent implements IRepositoryContent {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true
           },
         },
       },
@@ -47,6 +49,8 @@ class RepositoryContent implements IRepositoryContent {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
         comments: {
@@ -67,6 +71,8 @@ class RepositoryContent implements IRepositoryContent {
             select: {
               id: true,
               username: true,
+              name: true,
+              surname: true,
             },
           },
           comments: {
@@ -99,6 +105,8 @@ class RepositoryContent implements IRepositoryContent {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
       },
@@ -117,6 +125,8 @@ class RepositoryContent implements IRepositoryContent {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
       },

@@ -20,6 +20,8 @@ class RepositoryComment implements IRepositoryComment {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
         content: {
@@ -45,6 +47,8 @@ class RepositoryComment implements IRepositoryComment {
       },
     });
   }
+
+  // unused
   async getComments(): Promise<IComment[]> {
     return await this.db.comment.findMany({
       include: {
@@ -52,13 +56,15 @@ class RepositoryComment implements IRepositoryComment {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
-        content: {
-          select: {
-            id: true,
-          },
-        },
+        // content: {
+        //   select: {
+        //     id: true,
+        //   },
+        // },
       },
     });
   }
@@ -80,6 +86,8 @@ class RepositoryComment implements IRepositoryComment {
           select: {
             id: true,
             username: true,
+            name: true,
+            surname: true,
           },
         },
         content: {
