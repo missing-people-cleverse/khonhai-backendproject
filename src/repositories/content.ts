@@ -49,6 +49,11 @@ class RepositoryContent implements IRepositoryContent {
             username: true,
           },
         },
+        comments: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -62,6 +67,16 @@ class RepositoryContent implements IRepositoryContent {
             select: {
               id: true,
               username: true,
+            },
+          },
+          comments: {
+            select: {
+              id: true,
+              foundPlace: true,
+              foundDatetime: true,
+              foundDetail: true,
+              img: true,
+              isArchive: true,
             },
           },
         },
