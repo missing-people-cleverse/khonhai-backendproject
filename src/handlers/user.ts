@@ -2,7 +2,7 @@ import { compareHash, hashPassword } from "../auth/bcrypt";
 
 import { Response } from "express";
 import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
-import { AppRequest, Empty, IHandlerUser, WithUser, WithUserId } from ".";
+import { AppRequest, Empty, IHandlerUser, WithUser } from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
 import { ICreateUser } from "../entities";
 
@@ -106,10 +106,10 @@ class HandlerUser implements IHandlerUser {
   }
 
   async getUserDetail(
-    req: JwtAuthRequest<WithUserId, Empty>,
+    req: JwtAuthRequest<Empty, Empty>,
     res: Response
   ): Promise<Response> {
-    const id = req.params.id;
+    const id = req.payload.id;
 
     return this.repo
       .getUserById(id)
