@@ -100,7 +100,7 @@ class HandlerUser implements IHandlerUser {
         console.error(`failed to get user: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get user: ${err}`, statusCode: 401 })
+          .json({ error: `failed to get user: ${err}`, statusCode: 500 })
           .end();
       });
   }
