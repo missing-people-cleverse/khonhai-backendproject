@@ -37,7 +37,10 @@ class HandlerComment {
       !comment.foundPlace ||
       !comment.img
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     const userId = req.payload.id;
@@ -46,7 +49,7 @@ class HandlerComment {
     if (isNaN(contentId)) {
       return res
         .status(400)
-        .json({ error: `id ${contentId} is not a number` })
+        .json({ error: `id ${contentId} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -57,7 +60,7 @@ class HandlerComment {
         console.error(`failed to create comment: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to create comment: ${err}` })
+          .json({ error: `failed to create comment: ${err}`, statusCode: 500 })
           .end();
       });
   }
