@@ -44,7 +44,7 @@ export interface WithContent {
   img: string;
   nationality: string;
   ageLastSeen: number;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: string;
   weight: number;
   height: number;
@@ -53,7 +53,7 @@ export interface WithContent {
   status: string;
   province: string;
   place: string;
-  missingDatetime: Date;
+  missingDatetime: string;
   missingDetail: string;
 }
 
@@ -65,7 +65,7 @@ export interface WithContentUpdate {
   img: string;
   nationality: string;
   ageLastSeen: number;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: string;
   weight: number;
   height: number;
@@ -74,7 +74,7 @@ export interface WithContentUpdate {
   status: string;
   province: string;
   place: string;
-  missingDatetime: Date;
+  missingDatetime: string;
   missingDetail: string;
 }
 
@@ -88,7 +88,7 @@ export interface IHandlerContent {
 
 export interface WithComment {
   foundPlace: string;
-  foundDatetime: Date;
+  foundDatetime: string;
   foundDetail: string;
   img: string;
   isArchive: boolean;
@@ -100,7 +100,7 @@ export interface WithCommentId {
 
 export interface WithCommentUpdate {
   foundPlace: string;
-  foundDatetime: Date;
+  foundDatetime: string;
   foundDetail: string;
   img: string;
   isArchive: boolean;
