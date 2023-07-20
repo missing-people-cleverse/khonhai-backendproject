@@ -253,7 +253,7 @@ class HandlerContent implements IHandlerContent {
     const content: WithContentFilter = req.query;
     console.log(content);
 
-    if (!content.gender || !content.province || !content.ageLastSeen) {
+    if (!content.gender || !content.province) {
       return res
         .status(400)
         .json({ error: "missing filter", statusCode: 400 })

@@ -141,7 +141,7 @@ class RepositoryContent implements IRepositoryContent {
     return await this.db.content.findMany({
       where: {
         province: content.province,
-        ageLastSeen: content.ageLastSeen,
+        //ageLastSeen: content.ageLastSeen,
         gender: content.gender,
       },
       include: {
