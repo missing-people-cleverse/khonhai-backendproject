@@ -1,4 +1,3 @@
-import { Gender, Nationality, Province, Skin, Status } from "@prisma/client";
 import { Request, Response } from "express";
 import { JwtAuthRequest } from "../auth/jwt";
 
@@ -14,7 +13,7 @@ export interface WithUser {
   email: string;
   phoneNumber: string;
   address: string;
-  province: Province;
+  province: string;
   postcode: string;
 }
 
@@ -43,16 +42,16 @@ export interface WithContent {
   surname: string;
   nickname: string;
   img: string;
-  nationality: Nationality;
+  nationality: string;
   ageLastSeen: number;
   dateOfBirth: Date;
-  gender: Gender;
+  gender: string;
   weight: number;
   height: number;
-  skin: Skin;
+  skin: string;
   remark: string;
-  status: Status;
-  province: Province;
+  status: string;
+  province: string;
   place: string;
   missingDatetime: Date;
   missingDetail: string;
@@ -64,16 +63,16 @@ export interface WithContentUpdate {
   surname: string;
   nickname: string;
   img: string;
-  nationality: Nationality;
+  nationality: string;
   ageLastSeen: number;
   dateOfBirth: Date;
-  gender: Gender;
+  gender: string;
   weight: number;
   height: number;
-  skin: Skin;
+  skin: string;
   remark: string;
-  status: Status;
-  province: Province;
+  status: string;
+  province: string;
   place: string;
   missingDatetime: Date;
   missingDetail: string;
@@ -116,7 +115,7 @@ export interface IHandlerComment {
 
 export interface WithContentDelete {
   isArchive: boolean;
-  status: Status;
+  status: string;
 }
 
 export interface WithCommentDelete {

@@ -1,5 +1,3 @@
-import { Gender, Nationality, Province, Skin, Status } from "@prisma/client";
-
 export interface ICreateUser {
   username: string;
   password: string;
@@ -8,7 +6,7 @@ export interface ICreateUser {
   email: string;
   phoneNumber: string;
   address: string;
-  province: Province;
+  province: string;
   postcode: string;
 }
 
@@ -25,16 +23,16 @@ export interface ICreateContent {
   surname: string;
   nickname: string;
   img: string;
-  nationality: Nationality;
+  nationality: string;
   ageLastSeen: number;
   dateOfBirth: Date;
-  gender: Gender;
+  gender: string;
   weight: number;
   height: number;
-  skin: Skin;
+  skin: string;
   remark: string;
-  status: Status;
-  province: Province;
+  status: string;
+  province: string;
   place: string;
   missingDatetime: Date;
   missingDetail: string;
@@ -50,16 +48,16 @@ export interface IUpdateContent {
   surname: string;
   nickname: string;
   img: string;
-  nationality: Nationality;
+  nationality: string;
   ageLastSeen: number;
   dateOfBirth: Date;
-  gender: Gender;
+  gender: string;
   weight: number;
   height: number;
-  skin: Skin;
+  skin: string;
   remark: string;
-  status: Status;
-  province: Province;
+  status: string;
+  province: string;
   place: string;
   missingDatetime: Date;
   missingDetail: string;
@@ -89,5 +87,9 @@ export interface IUpdateComment {
 
 export interface IDeleteContent {
   isArchive: boolean;
-  status: Status;
+  status: string;
+}
+
+export interface IDeleteComment {
+  isArchive: boolean;
 }

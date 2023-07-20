@@ -26,7 +26,7 @@ class RepositoryContent implements IRepositoryContent {
             id: true,
             username: true,
             name: true,
-            surname: true
+            surname: true,
           },
         },
       },

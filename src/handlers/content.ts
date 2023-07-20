@@ -29,7 +29,36 @@ class HandlerContent implements IHandlerContent {
   ): Promise<Response> {
     const content: WithContent = req.body;
 
-    //user has to fill every details of content
+    // const keyInfo = [
+    //   "ageLastSeen",
+    //   "dateOfBirth",
+    //   "gender",
+    //   "height",
+    //   "img",
+    //   "missingDatetime",
+    //   "missingDetail",
+    //   "name",
+    //   "nationality",
+    //   "nickname",
+    //   "place",
+    //   "province",
+    //   "remark",
+    //   "skin",
+    //   "status",
+    //   "surname",
+    //   "weight",
+    // ];
+    // console.log(keyInfo);
+
+    // const checkInfo = keyInfo.every(
+    //   (check) => content[check] !== undefined && content[check] !== null
+    // );
+    // console.log(checkInfo);
+
+    // if (!checkInfo) {
+    //   return res.status(400).json({ error: "missing information" }).end();
+    // }
+
     if (
       !content.ageLastSeen ||
       !content.dateOfBirth ||

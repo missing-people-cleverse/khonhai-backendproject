@@ -21,7 +21,7 @@ model User {
   email String @unique
   phoneNumber String @unique
   address String
-  province Province
+  province String
   postcode String
   registeredAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,16 +41,16 @@ model Content {
   surname String
   nickname String
   img String
-  nationality Nationality 
+  nationality String 
   ageLastSeen Int
   dateOfBirth DateTime
-  gender Gender
+  gender String
   weight Int
   height Int
-  skin Skin 
+  skin String 
   remark String
-  status Status
-  province Province
+  status String
+  province String
   place String
   missingDatetime DateTime
   missingDetail String
@@ -73,107 +73,107 @@ model Comment {
   isArchive Boolean @default(false)
 }
 
-enum Nationality {
-  THAI
-  NONTHAI
-}
+// enum Nationality {
+//   THAI
+//   NONTHAI
+// }
 
-enum Gender {
-  MALE
-  FEMALE
-}
+// enum Gender {
+//   MALE
+//   FEMALE
+// }
 
-enum Skin {
-  WHITE
-  WHITEYELLOW
-  WHITERED
-  BLACK
-  BLACKYELLOW
-  BLACKRED
-  NORMAL
-}
+// enum Skin {
+//   WHITE
+//   WHITEYELLOW
+//   WHITERED
+//   BLACK
+//   BLACKYELLOW
+//   BLACKRED
+//   NORMAL
+// }
 
-enum Status {
-  UNFOUNED
-  FOUNDED
-}
+// enum Status {
+//   UNFOUNED
+//   FOUNDED
+// }
 
-enum Province {
-  BANGKOK
-  KRABI
-  KANCHANABURI
-  KALASIN
-  KAMPHAENGPHET
-  KHONKAEN
-  CHANTHABURI
-  CHACHOENGSAO
-  CHONBURI
-  CHAINAT
-  CHAIYAPHUM
-  CHUMPHON
-  CHIANGRAI
-  CHIANGMAI
-  TRANG
-  TRAT
-  TAK
-  NAKHONNAYOK
-  NAKHONPATHOM
-  NAKHONPHANOM
-  NAKHONRATCHASIMA
-  NAKHONSITHAMMARAT
-  NAKHONSAWAN
-  NONTHABURI
-  NARATHIWAT
-  NAN
-  BUENGKAN
-  BURIRAM
-  PATHUMTHANI
-  PRACHUAPKHIRIKHAN
-  PRACHINBURI
-  PATTANI
-  PHRANAKHONSIAYUTTHAYA
-  PHAYAO
-  PHANGNGA
-  PHATTHALUNG
-  PHICHIT
-  PHITSANULOK
-  PHETCHABURI
-  PHETCHABUN
-  PHRAE
-  PHUKET
-  MAHASARAKHAM
-  MUKDAHAN
-  MAEHONGSON
-  YASOTHON
-  YALA
-  ROIET
-  RANONG
-  RAYONG
-  RATCHABURI
-  LOPBURI
-  LAMPANG
-  LAMPHUN
-  LOEI
-  SISAKET
-  SAKONNAKHON
-  SONGKHLA
-  SATUN
-  SAMUTPRAKAN
-  SAMUTSONGKHRAM
-  SAMUTSAKHON
-  SAKAEO
-  SARABURI
-  SINGBURI
-  SUKHOTHAI
-  SUPHANBURI
-  SURATTHANI
-  SURIN
-  NONGKHAI
-  NONGBUALAMPHU
-  ANGTHONG
-  AMNATCHAROEN
-  UDONTHANI
-  UTTARADIT
-  UTHAITHANI
-  UBONRATCHATHANI
-}
+// enum Province {
+//   BANGKOK
+//   KRABI
+//   KANCHANABURI
+//   KALASIN
+//   KAMPHAENGPHET
+//   KHONKAEN
+//   CHANTHABURI
+//   CHACHOENGSAO
+//   CHONBURI
+//   CHAINAT
+//   CHAIYAPHUM
+//   CHUMPHON
+//   CHIANGRAI
+//   CHIANGMAI
+//   TRANG
+//   TRAT
+//   TAK
+//   NAKHONNAYOK
+//   NAKHONPATHOM
+//   NAKHONPHANOM
+//   NAKHONRATCHASIMA
+//   NAKHONSITHAMMARAT
+//   NAKHONSAWAN
+//   NONTHABURI
+//   NARATHIWAT
+//   NAN
+//   BUENGKAN
+//   BURIRAM
+//   PATHUMTHANI
+//   PRACHUAPKHIRIKHAN
+//   PRACHINBURI
+//   PATTANI
+//   PHRANAKHONSIAYUTTHAYA
+//   PHAYAO
+//   PHANGNGA
+//   PHATTHALUNG
+//   PHICHIT
+//   PHITSANULOK
+//   PHETCHABURI
+//   PHETCHABUN
+//   PHRAE
+//   PHUKET
+//   MAHASARAKHAM
+//   MUKDAHAN
+//   MAEHONGSON
+//   YASOTHON
+//   YALA
+//   ROIET
+//   RANONG
+//   RAYONG
+//   RATCHABURI
+//   LOPBURI
+//   LAMPANG
+//   LAMPHUN
+//   LOEI
+//   SISAKET
+//   SAKONNAKHON
+//   SONGKHLA
+//   SATUN
+//   SAMUTPRAKAN
+//   SAMUTSONGKHRAM
+//   SAMUTSAKHON
+//   SAKAEO
+//   SARABURI
+//   SINGBURI
+//   SUKHOTHAI
+//   SUPHANBURI
+//   SURATTHANI
+//   SURIN
+//   NONGKHAI
+//   NONGBUALAMPHU
+//   ANGTHONG
+//   AMNATCHAROEN
+//   UDONTHANI
+//   UTTARADIT
+//   UTHAITHANI
+//   UBONRATCHATHANI
+// }

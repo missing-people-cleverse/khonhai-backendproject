@@ -1,5 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { IComment, ICreateComment, IUpdateComment } from "../entities";
+import {
+  IComment,
+  ICreateComment,
+  IDeleteComment,
+  IUpdateComment,
+} from "../entities";
 import { IRepositoryComment } from ".";
 
 export function newRepositoryComment(db: PrismaClient): IRepositoryComment {
@@ -99,8 +104,4 @@ class RepositoryComment implements IRepositoryComment {
       data: { ...comment },
     });
   }
-}
-
-export interface IDeleteComment {
-  isArchive: boolean;
 }
