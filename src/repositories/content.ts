@@ -4,6 +4,7 @@ import {
   IContent,
   ICreateContent,
   IDeleteContent,
+  IFilterContent,
   IUpdateContent,
 } from "../entities";
 
@@ -133,6 +134,31 @@ class RepositoryContent implements IRepositoryContent {
         },
       },
       data: { ...content },
+    });
+  }
+
+  async getContentByFilter(content: IFilterContent): Promise<IContent[]> {
+    return await this.db.content.findMany({
+      where: {
+        province: content.province,
+        ageLastSeen: content.ageLastSeen,
+        gender: content.gender,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            surname: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
   }
 }

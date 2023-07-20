@@ -1,9 +1,10 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import {
   Empty,
   IHandlerContent,
   WithContent,
   WithContentDelete,
+  WithContentFilter,
   WithContentId,
   WithContentUpdate,
 } from ".";
@@ -239,6 +240,35 @@ class HandlerContent implements IHandlerContent {
           .status(500)
           .json({
             error: `failed to delete content ${id}: ${err}`,
+            statusCode: 500,
+          })
+          .end();
+      });
+  }
+
+  async getContentByFilter(
+    req: Request<Empty, Empty, Empty, WithContentFilter>,
+    res: Response
+  ): Promise<Response> {
+    const content: WithContentFilter = req.query;
+    console.log(content);
+
+    if (!content.gender || !content.province || !content.ageLastSeen) {
+      return res
+        .status(400)
+        .json({ error: "missing filter", statusCode: 400 })
+        .end();
+    }
+
+    return this.repo
+      .getContentByFilter(content)
+      .then((contents) => res.status(201).json(contents).end())
+      .catch((err) => {
+        console.error(`failed to filter contents: ${err}`);
+        return res
+          .status(500)
+          .json({
+            error: `failed to filter contents : ${err}`,
             statusCode: 500,
           })
           .end();
