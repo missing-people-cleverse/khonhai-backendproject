@@ -109,7 +109,7 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to get contents: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get contents : ${err}` })
+          .json({ error: `failed to get contents : ${err}`, statusCode: 500 })
           .end();
       });
   }
