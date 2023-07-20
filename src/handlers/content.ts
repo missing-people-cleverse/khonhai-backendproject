@@ -78,7 +78,10 @@ class HandlerContent implements IHandlerContent {
       !content.surname ||
       !content.weight
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     const userId = req.payload.id;
@@ -90,7 +93,7 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to create content: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to create content: ${err}` })
+          .json({ error: `failed to create content: ${err}`, statusCode: 500 })
           .end();
       });
   }
