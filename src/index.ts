@@ -86,7 +86,7 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerContent.updateContent.bind(handlerContent)
   );
-  contentRouter.delete(
+  contentRouter.patch(
     "/delete/:id",
     middleware.jwtMiddleware.bind(middleware),
     handlerContent.deleteContent.bind(handlerContent)
@@ -105,7 +105,7 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.updateComment.bind(handlerComment)
   );
-  commentRouter.delete(
+  commentRouter.patch(
     "/delete/:id",
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.deleteComment.bind(handlerComment)
