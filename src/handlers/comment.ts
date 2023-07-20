@@ -77,7 +77,7 @@ class HandlerComment {
         console.error(`failed to get comments: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get comments: ${err}` })
+          .json({ error: `failed to get comments: ${err}`, statusCode: 500 })
           .end();
       });
   }
