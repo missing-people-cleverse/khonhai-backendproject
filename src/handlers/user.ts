@@ -38,7 +38,10 @@ class HandlerUser implements IHandlerUser {
       !userRegister.province ||
       !userRegister.postcode
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -56,7 +59,10 @@ class HandlerUser implements IHandlerUser {
       .catch((err) =>
         res
           .status(500)
-          .json({ error: `failed to register user ${userRegister.username}` })
+          .json({
+            error: `failed to register user ${userRegister.username}`,
+            statusCode: 500,
+          })
           .end()
       );
   }
@@ -100,7 +106,7 @@ class HandlerUser implements IHandlerUser {
         console.error(`failed to get user: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get user: ${err}`, statusCode: 401 })
+          .json({ error: `failed to get user: ${err}`, statusCode: 500 })
           .end();
       });
   }
@@ -117,7 +123,7 @@ class HandlerUser implements IHandlerUser {
         if (!user) {
           return res
             .status(404)
-            .json({ error: `no such user: ${id}`, statusCode: 401 })
+            .json({ error: `no such user: ${id}`, statusCode: 404 })
             .end();
         }
         return res
@@ -128,7 +134,7 @@ class HandlerUser implements IHandlerUser {
       .catch((err) => {
         const errMsg = `failed to get user Detail ${id}: ${err}`;
         console.error(errMsg);
-        return res.status(500).json({ error: errMsg, statusCode: 401 }).end();
+        return res.status(500).json({ error: errMsg, statusCode: 500 }).end();
       });
   }
 
@@ -143,7 +149,10 @@ class HandlerUser implements IHandlerUser {
         console.error(err);
         return res
           .status(500)
-          .json({ error: `couldn't log out with token ${req.token}` })
+          .json({
+            error: `couldn't log out with token ${req.token}`,
+            statusCode: 500,
+          })
           .end();
       });
   }

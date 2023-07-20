@@ -78,7 +78,10 @@ class HandlerContent implements IHandlerContent {
       !content.surname ||
       !content.weight
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     const userId = req.payload.id;
@@ -90,7 +93,7 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to create content: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to create content: ${err}` })
+          .json({ error: `failed to create content: ${err}`, statusCode: 500 })
           .end();
       });
   }
@@ -106,7 +109,7 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to get contents: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get contents : ${err}` })
+          .json({ error: `failed to get contents : ${err}`, statusCode: 500 })
           .end();
       });
   }
@@ -120,7 +123,7 @@ class HandlerContent implements IHandlerContent {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -128,7 +131,10 @@ class HandlerContent implements IHandlerContent {
       .getContent(id)
       .then((content) => {
         if (!content) {
-          return res.status(404).json(`no such content: ${id}`).end();
+          return res
+            .status(404)
+            .json({ error: `no such content: ${id}`, statusCode: 404 })
+            .end();
         }
         return res.status(201).json(content).end();
       })
@@ -136,7 +142,10 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to get content ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get content ${id}: ${err}` })
+          .json({
+            error: `failed to get content ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
@@ -150,7 +159,7 @@ class HandlerContent implements IHandlerContent {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -177,7 +186,10 @@ class HandlerContent implements IHandlerContent {
       !content.surname ||
       !content.weight
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -187,7 +199,10 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to update content ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to update content ${id}: ${err}` })
+          .json({
+            error: `failed to update content ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
@@ -201,7 +216,7 @@ class HandlerContent implements IHandlerContent {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -209,7 +224,10 @@ class HandlerContent implements IHandlerContent {
 
     //user has to fill every details of delete content
     if (!content.isArchive || !content.status) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -219,7 +237,10 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to delete content ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to delete content ${id}: ${err}` })
+          .json({
+            error: `failed to delete content ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
