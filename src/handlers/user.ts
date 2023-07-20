@@ -117,7 +117,7 @@ class HandlerUser implements IHandlerUser {
         if (!user) {
           return res
             .status(404)
-            .json({ error: `no such user: ${id}`, statusCode: 401 })
+            .json({ error: `no such user: ${id}`, statusCode: 404 })
             .end();
         }
         return res
@@ -128,7 +128,7 @@ class HandlerUser implements IHandlerUser {
       .catch((err) => {
         const errMsg = `failed to get user Detail ${id}: ${err}`;
         console.error(errMsg);
-        return res.status(500).json({ error: errMsg, statusCode: 401 }).end();
+        return res.status(500).json({ error: errMsg, statusCode: 500 }).end();
       });
   }
 
