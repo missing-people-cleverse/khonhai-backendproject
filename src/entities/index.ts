@@ -25,7 +25,7 @@ export interface ICreateContent {
   img: string;
   nationality: string;
   ageLastSeen: number;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: string;
   weight: number;
   height: number;
@@ -34,7 +34,7 @@ export interface ICreateContent {
   status: string;
   province: string;
   place: string;
-  missingDatetime: Date;
+  missingDatetime: string;
   missingDetail: string;
 }
 
@@ -50,7 +50,7 @@ export interface IUpdateContent {
   img: string;
   nationality: string;
   ageLastSeen: number;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: string;
   weight: number;
   height: number;
@@ -59,7 +59,7 @@ export interface IUpdateContent {
   status: string;
   province: string;
   place: string;
-  missingDatetime: Date;
+  missingDatetime: string;
   missingDetail: string;
 }
 
@@ -67,7 +67,7 @@ export interface ICreateComment {
   contentId: number;
   userId: string;
   foundPlace: string;
-  foundDatetime: Date;
+  foundDatetime: string;
   foundDetail: string;
   img: string;
   isArchive: boolean;
@@ -79,7 +79,7 @@ export interface IComment extends ICreateComment {
 
 export interface IUpdateComment {
   foundPlace: string;
-  foundDatetime: Date;
+  foundDatetime: string;
   foundDetail: string;
   img: string;
   isArchive: boolean;

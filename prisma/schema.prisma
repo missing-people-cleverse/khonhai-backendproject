@@ -43,7 +43,7 @@ model Content {
   img String
   nationality String 
   ageLastSeen Int
-  dateOfBirth DateTime
+  dateOfBirth String
   gender String
   weight Int
   height Int
@@ -52,7 +52,7 @@ model Content {
   status String
   province String
   place String
-  missingDatetime DateTime
+  missingDatetime String
   missingDetail String
   comments Comment[]
 }
@@ -67,7 +67,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   foundPlace String
-  foundDatetime DateTime
+  foundDatetime String
   foundDetail String
   img String
   isArchive Boolean @default(false)
