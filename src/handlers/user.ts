@@ -143,7 +143,10 @@ class HandlerUser implements IHandlerUser {
         console.error(err);
         return res
           .status(500)
-          .json({ error: `couldn't log out with token ${req.token}` })
+          .json({
+            error: `couldn't log out with token ${req.token}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
