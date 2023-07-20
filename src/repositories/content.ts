@@ -73,6 +73,8 @@ class RepositoryContent implements IRepositoryContent {
               username: true,
               name: true,
               surname: true,
+              email: true,
+              phoneNumber: true,
             },
           },
           comments: {
