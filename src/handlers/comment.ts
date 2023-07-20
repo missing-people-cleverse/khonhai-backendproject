@@ -133,7 +133,7 @@ class HandlerComment {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -141,7 +141,10 @@ class HandlerComment {
 
     //user has to fill every details of delete conmment
     if (!comment.isArchive) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -151,7 +154,10 @@ class HandlerComment {
         console.error(`failed to delete comment ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to delete comment ${id}: ${err}` })
+          .json({
+            error: `failed to delete comment ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
