@@ -128,6 +128,6 @@ export interface WithCommentDelete {
 
 export interface WithContentFilter {
   province: string;
-  // ageLastSeen: number;
+  ageLastSeenPeriod: string;
   gender: string;
 }

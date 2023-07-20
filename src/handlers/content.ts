@@ -251,27 +251,100 @@ class HandlerContent implements IHandlerContent {
     res: Response
   ): Promise<Response> {
     const content: WithContentFilter = req.query;
-    console.log(content);
 
-    if (!content.gender || !content.province) {
+    if (!content.gender || !content.province || !content.ageLastSeenPeriod) {
       return res
         .status(400)
         .json({ error: "missing filter", statusCode: 400 })
         .end();
     }
 
-    return this.repo
-      .getContentByFilter(content)
-      .then((contents) => res.status(201).json(contents).end())
-      .catch((err) => {
-        console.error(`failed to filter contents: ${err}`);
-        return res
-          .status(500)
-          .json({
-            error: `failed to filter contents : ${err}`,
-            statusCode: 500,
-          })
-          .end();
-      });
+    if (content.ageLastSeenPeriod === "เด็ก (น้อยกว่า 10 ปี)") {
+      return this.repo
+        .getContentByFilter(content, 0, 10)
+        .then((contents) => res.status(201).json(contents).end())
+        .catch((err) => {
+          console.error(`failed to filter contents: ${err}`);
+          return res
+            .status(500)
+            .json({
+              error: `failed to filter contents : ${err}`,
+              statusCode: 500,
+            })
+            .end();
+        });
+    }
+    if (content.ageLastSeenPeriod === "วัยรุ่น (11 - 25 ปี)") {
+      return this.repo
+        .getContentByFilter(content, 11, 25)
+        .then((contents) => res.status(201).json(contents).end())
+        .catch((err) => {
+          console.error(`failed to filter contents: ${err}`);
+          return res
+            .status(500)
+            .json({
+              error: `failed to filter contents : ${err}`,
+              statusCode: 500,
+            })
+            .end();
+        });
+    }
+
+    if (content.ageLastSeenPeriod === "ผู้ใหญ่ (26 - 60 ปี)") {
+      return this.repo
+        .getContentByFilter(content, 26, 60)
+        .then((contents) => res.status(201).json(contents).end())
+        .catch((err) => {
+          console.error(`failed to filter contents: ${err}`);
+          return res
+            .status(500)
+            .json({
+              error: `failed to filter contents : ${err}`,
+              statusCode: 500,
+            })
+            .end();
+        });
+    }
+
+    if (content.ageLastSeenPeriod === "ผู้สูงอายุ (61 ปี ขึ่นไป)") {
+      return this.repo
+        .getContentByFilter(content, 61, 160)
+        .then((contents) => res.status(201).json(contents).end())
+        .catch((err) => {
+          console.error(`failed to filter contents: ${err}`);
+          return res
+            .status(500)
+            .json({
+              error: `failed to filter contents : ${err}`,
+              statusCode: 500,
+            })
+            .end();
+        });
+    }
+
+    return res
+      .status(400)
+      .json({ error: "no such condition", statusCode: 500 })
+      .end();
   }
 }
+
+// ต่ำกว่า 10 ปี   เด็ก (น้อยกว่า 10 ปี)
+// 11 - 25 ปี    วัยรุ่น (11 - 25 ปี)
+// 26 - 60 ปี    ผู้ใหญ่ (26 - 60 ปี)
+// มากกว่า 60 ปี  ผู้สูงอายุ (61 ปี ขึ่นไป)
+
+//   return this.repo
+//     .getContentByFilter(content)
+//     .then((contents) => res.status(201).json(contents).end())
+//     .catch((err) => {
+//       console.error(`failed to filter contents: ${err}`);
+//       return res
+//         .status(500)
+//         .json({
+//           error: `failed to filter contents : ${err}`,
+//           statusCode: 500,
+//         })
+//         .end();
+//     });
+// }
