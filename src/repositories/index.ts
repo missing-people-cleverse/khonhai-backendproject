@@ -4,12 +4,12 @@ import {
   ICreateComment,
   ICreateContent,
   ICreateUser,
+  IDeleteComment,
   IDeleteContent,
   IUpdateComment,
   IUpdateContent,
   IUser,
 } from "../entities";
-import { IDeleteComment } from "./comment";
 
 export interface IRepositoryUser {
   createUser(user: ICreateUser): Promise<IUser>;
