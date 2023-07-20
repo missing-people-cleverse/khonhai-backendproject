@@ -38,7 +38,10 @@ class HandlerUser implements IHandlerUser {
       !userRegister.province ||
       !userRegister.postcode
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -56,7 +59,10 @@ class HandlerUser implements IHandlerUser {
       .catch((err) =>
         res
           .status(500)
-          .json({ error: `failed to register user ${userRegister.username}` })
+          .json({
+            error: `failed to register user ${userRegister.username}`,
+            statusCode: 500,
+          })
           .end()
       );
   }
