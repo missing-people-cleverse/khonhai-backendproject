@@ -159,7 +159,7 @@ class HandlerContent implements IHandlerContent {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -186,7 +186,10 @@ class HandlerContent implements IHandlerContent {
       !content.surname ||
       !content.weight
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -196,7 +199,10 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to update content ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to update content ${id}: ${err}` })
+          .json({
+            error: `failed to update content ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
