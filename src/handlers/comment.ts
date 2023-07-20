@@ -91,7 +91,7 @@ class HandlerComment {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -104,7 +104,10 @@ class HandlerComment {
       !comment.foundPlace ||
       !comment.img
     ) {
-      return res.status(400).json({ error: "missing information" }).end();
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -114,7 +117,10 @@ class HandlerComment {
         console.error(`failed to update comment ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to update comment ${id}: ${err}` })
+          .json({
+            error: `failed to update comment ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
