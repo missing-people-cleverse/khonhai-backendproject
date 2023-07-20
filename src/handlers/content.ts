@@ -123,7 +123,7 @@ class HandlerContent implements IHandlerContent {
     if (isNaN(id)) {
       return res
         .status(400)
-        .json({ error: `id ${id} is not a number` })
+        .json({ error: `id ${id} is not a number`, statusCode: 400 })
         .end();
     }
 
@@ -131,7 +131,10 @@ class HandlerContent implements IHandlerContent {
       .getContent(id)
       .then((content) => {
         if (!content) {
-          return res.status(404).json(`no such content: ${id}`).end();
+          return res
+            .status(404)
+            .json({ error: `no such content: ${id}`, statusCode: 404 })
+            .end();
         }
         return res.status(201).json(content).end();
       })
@@ -139,7 +142,10 @@ class HandlerContent implements IHandlerContent {
         console.error(`failed to get content ${id}: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get content ${id}: ${err}` })
+          .json({
+            error: `failed to get content ${id}: ${err}`,
+            statusCode: 500,
+          })
           .end();
       });
   }
