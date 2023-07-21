@@ -207,6 +207,7 @@ class HandlerContent implements IHandlerContent {
       });
   }
 
+  //content Archive
   async deleteContent(
     req: JwtAuthRequest<WithContentId, WithContentDelete>,
     res: Response

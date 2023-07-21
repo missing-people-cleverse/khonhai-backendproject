@@ -32,7 +32,7 @@ export interface IRepositoryContent {
 
 export interface IRepositoryComment {
   createComment(comment: ICreateComment): Promise<IComment>;
-  getComments(): Promise<IComment[]>;
+  getComment(id: number): Promise<IComment[]>;
   updateComment(id: number, comment: IUpdateComment): Promise<IComment>;
   deleteComment(id: number, comment: IDeleteComment): Promise<IDeleteComment>;
 }

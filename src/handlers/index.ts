@@ -95,7 +95,7 @@ export interface WithComment {
 }
 
 export interface WithCommentId {
-  id: number;
+  id: string;
 }
 
 export interface WithCommentUpdate {
@@ -108,7 +108,7 @@ export interface WithCommentUpdate {
 
 export interface IHandlerComment {
   createComment: HandlerFunc<JwtAuthRequest<WithContentId, WithComment>>;
-  getComments: HandlerFunc<JwtAuthRequest<Empty, Empty>>;
+  getComment: HandlerFunc<JwtAuthRequest<WithContentId, Empty>>;
   updateComment: HandlerFunc<JwtAuthRequest<WithCommentId, WithCommentUpdate>>;
   deleteComment: HandlerFunc<JwtAuthRequest<WithCommentId, WithCommentDelete>>;
 }
