@@ -124,6 +124,7 @@ class RepositoryContent implements IRepositoryContent {
     });
   }
 
+  //content Archive
   async deleteContent(
     id: number,
     content: IDeleteContent

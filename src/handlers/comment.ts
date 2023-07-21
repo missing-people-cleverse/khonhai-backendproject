@@ -132,6 +132,8 @@ class HandlerComment {
           .end();
       });
   }
+
+  //comment Archive
   async deleteComment(
     req: JwtAuthRequest<WithCommentId, WithCommentDelete>,
     res: Response

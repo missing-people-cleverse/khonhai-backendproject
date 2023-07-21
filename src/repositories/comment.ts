@@ -81,6 +81,7 @@ class RepositoryComment implements IRepositoryComment {
     });
   }
 
+  //comment Archive
   async deleteComment(
     id: number,
     comment: IDeleteComment
