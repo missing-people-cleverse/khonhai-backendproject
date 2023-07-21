@@ -85,6 +85,8 @@ class RepositoryContent implements IRepositoryContent {
               foundDetail: true,
               img: true,
               isArchive: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
@@ -97,6 +99,12 @@ class RepositoryContent implements IRepositoryContent {
       })
       .catch((err) => Promise.reject(`failed to get content ${id}: ${err}`));
   }
+
+  // id Int @id @default(autoincrement())
+  // contentId Int
+  // content Content @relation(fields: [contentId], references: [id])
+  // userId String
+  // user User @relation(fields: [userId], references: [id])
 
   //FE make condition to show Edit button
   async updateContent(id: number, content: IUpdateContent): Promise<IContent> {
@@ -116,6 +124,7 @@ class RepositoryContent implements IRepositoryContent {
     });
   }
 
+  //content Archive
   async deleteContent(
     id: number,
     content: IDeleteContent

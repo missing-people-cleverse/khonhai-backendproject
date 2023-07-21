@@ -98,8 +98,10 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.createComment.bind(handlerComment)
   );
-  // unused
-  commentRouter.get("/", handlerComment.getComments.bind(handlerComment));
+
+  //getCommentbyontentId
+  commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
+
   commentRouter.patch(
     "/edit/:id",
     middleware.jwtMiddleware.bind(middleware),

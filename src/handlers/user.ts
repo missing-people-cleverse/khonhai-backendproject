@@ -4,7 +4,6 @@ import { Response } from "express";
 import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
 import { AppRequest, Empty, IHandlerUser, WithUser } from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
-import { ICreateUser } from "../entities";
 
 export function newHandlerUser(
   repo: IRepositoryUser,
@@ -25,7 +24,8 @@ class HandlerUser implements IHandlerUser {
     req: AppRequest<Empty, WithUser>,
     res: Response
   ): Promise<Response> {
-    const userRegister: ICreateUser = req.body;
+    const userRegister: WithUser = req.body;
+    console.log(userRegister);
 
     if (
       !userRegister.username ||
@@ -60,7 +60,7 @@ class HandlerUser implements IHandlerUser {
         res
           .status(500)
           .json({
-            error: `failed to register user ${userRegister.username}`,
+            error: `failed to register user ${userRegister.username}: ${err}`,
             statusCode: 500,
           })
           .end()
