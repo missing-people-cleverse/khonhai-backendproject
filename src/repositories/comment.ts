@@ -53,9 +53,9 @@ class RepositoryComment implements IRepositoryComment {
     });
   }
 
-  // unused
-  async getComments(): Promise<IComment[]> {
+  async getComment(id: number): Promise<IComment[]> {
     return await this.db.comment.findMany({
+      where: { contentId: id },
       include: {
         user: {
           select: {
@@ -63,16 +63,17 @@ class RepositoryComment implements IRepositoryComment {
             username: true,
             name: true,
             surname: true,
+            email: true,
+            phoneNumber: true,
+            address: true,
+            province: true,
+            postcode: true,
           },
         },
-        // content: {
-        //   select: {
-        //     id: true,
-        //   },
-        // },
       },
     });
   }
+
   async updateComment(id: number, comment: IUpdateComment): Promise<IComment> {
     return await this.db.comment.update({
       where: { id },

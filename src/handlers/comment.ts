@@ -65,19 +65,27 @@ class HandlerComment {
       });
   }
 
-  // unused
-  async getComments(
-    req: JwtAuthRequest<Empty, Empty>,
+  async getComment(
+    req: JwtAuthRequest<WithContentId, Empty>,
     res: Response
   ): Promise<Response> {
+    const contentId = Number(req.params.id);
+
+    if (isNaN(contentId)) {
+      return res
+        .status(400)
+        .json({ error: `id ${contentId} is not a number`, statusCode: 400 })
+        .end();
+    }
+
     return this.repo
-      .getComments()
-      .then((comments) => res.status(201).json(comments).end())
+      .getComment(contentId)
+      .then((comment) => res.status(201).json(comment).end())
       .catch((err) => {
-        console.error(`failed to get comments: ${err}`);
+        console.error(`failed to get comment: ${err}`);
         return res
           .status(500)
-          .json({ error: `failed to get comments: ${err}`, statusCode: 500 })
+          .json({ error: `failed to get comment: ${err}`, statusCode: 500 })
           .end();
       });
   }
