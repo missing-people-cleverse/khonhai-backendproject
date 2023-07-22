@@ -1,5 +1,6 @@
 import { S3 } from "aws-sdk";
 import fs from "fs";
+// import bcryptjs from "bcryptjs";
 
 import { config } from "../entities/index";
 
@@ -14,6 +15,12 @@ import { config } from "../entities/index";
 export const uploadToS3 = async (s3: S3, fileData?: Express.Multer.File) => {
   try {
     const fileContent = fs.readFileSync(fileData!.path);
+
+    // function hashFileName(password: string): string {
+    //   const salt = bcryptjs.genSaltSync(12);
+
+    //   return bcryptjs.hashSync(password, salt);
+    // }
 
     const params = {
       Bucket: config.bucket_name,
