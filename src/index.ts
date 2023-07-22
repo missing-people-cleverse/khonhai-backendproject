@@ -12,6 +12,7 @@ import { newRepositoryContent } from "./repositories/content";
 import { newHandlerContent } from "./handlers/content";
 import { newRepositoryComment } from "./repositories/comment";
 import { newHandlerComment } from "./handlers/comment";
+import { newRepositoryBlacklistUnique } from "./repositories/unique";
 
 async function main() {
   const db = new PrismaClient();
@@ -27,7 +28,12 @@ async function main() {
 
   const repoUser = newRepositoryUser(db);
   const repoBlacklist = newRepositoryBlacklist(redis);
-  const handlerUser = newHandlerUser(repoUser, repoBlacklist);
+  const repoBlacklistUnique = newRepositoryBlacklistUnique(redis);
+  const handlerUser = newHandlerUser(
+    repoUser,
+    repoBlacklist,
+    repoBlacklistUnique
+  );
 
   const repoContent = newRepositoryContent(db);
   const handlerContent = newHandlerContent(repoContent);

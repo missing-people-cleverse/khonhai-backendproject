@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { JwtAuthRequest } from "../auth/jwt";
+import { WithUsernameCheck } from "./user";
 
 export interface AppRequest<Params, Body> extends Request<Params, any, Body> {}
 
@@ -23,6 +24,7 @@ export interface WithUserId {
 
 export type HandlerFunc<Req> = (req: Req, res: Response) => Promise<Response>;
 export interface IHandlerUser {
+  checkUsername: HandlerFunc<AppRequest<Empty, WithUsernameCheck>>;
   register: HandlerFunc<AppRequest<Empty, WithUser>>;
   login: HandlerFunc<AppRequest<Empty, WithUser>>;
   getUserDetail(

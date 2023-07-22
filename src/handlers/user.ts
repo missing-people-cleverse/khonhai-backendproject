@@ -4,20 +4,58 @@ import { Response } from "express";
 import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
 import { AppRequest, Empty, IHandlerUser, WithUser } from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
+import { IRepositoryBlacklistUnique } from "../repositories/unique";
 
 export function newHandlerUser(
   repo: IRepositoryUser,
-  repoBlacklist: IRepositoryBlacklist
+  repoBlacklist: IRepositoryBlacklist,
+  repoBlacklistUnique: IRepositoryBlacklistUnique
 ): IHandlerUser {
-  return new HandlerUser(repo, repoBlacklist);
+  return new HandlerUser(repo, repoBlacklist, repoBlacklistUnique);
+}
+
+export interface WithUsernameCheck {
+  username: string;
 }
 class HandlerUser implements IHandlerUser {
   private repo: IRepositoryUser;
   private repoBlacklist: IRepositoryBlacklist;
+  private repoBlacklistUnique: IRepositoryBlacklistUnique;
 
-  constructor(repo: IRepositoryUser, repoBlacklist: IRepositoryBlacklist) {
+  constructor(
+    repo: IRepositoryUser,
+    repoBlacklist: IRepositoryBlacklist,
+    repoBlacklistUnique: IRepositoryBlacklistUnique
+  ) {
     this.repo = repo;
     this.repoBlacklist = repoBlacklist;
+    this.repoBlacklistUnique = repoBlacklistUnique;
+  }
+
+  //check unique Username
+  async checkUsername(
+    req: AppRequest<Empty, WithUsernameCheck>,
+    res: Response
+  ): Promise<Response> {
+    const username = req.body.username;
+
+    const isBlacklistedUsername =
+      await this.repoBlacklistUnique.isBlacklistUsername(username);
+
+    return this.repoBlacklistUnique
+      .isBlacklistUsername(username)
+      .then((username) => {
+        return res.status(201).json({ isBlacklistedUsername }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check username ${username}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
   }
 
   async register(
