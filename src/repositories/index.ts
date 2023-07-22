@@ -6,6 +6,7 @@ import {
   ICreateUser,
   IDeleteComment,
   IDeleteContent,
+  IFilterContent,
   IUpdateComment,
   IUpdateContent,
   IUser,
@@ -28,6 +29,11 @@ export interface IRepositoryContent {
   getContent(id: number): Promise<IContent | null>;
   updateContent(id: number, content: IUpdateContent): Promise<IContent>;
   deleteContent(id: number, content: IDeleteContent): Promise<IDeleteContent>;
+  getContentByFilter(
+    content: IFilterContent,
+    ageStart: number,
+    ageEnd: number
+  ): Promise<IContent[]>;
 }
 
 export interface IRepositoryComment {

@@ -44,6 +44,8 @@ async function main() {
   const contentRouter = express.Router();
   const commentRouter = express.Router();
 
+  const filterRouter = express.Router();
+
   var cors = require("cors");
   server.use(cors());
 
@@ -51,6 +53,8 @@ async function main() {
   server.use("/user", userRouter);
   server.use("/content", contentRouter);
   server.use("/comment", commentRouter);
+
+  server.use("/contentfilter", filterRouter);
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
@@ -91,6 +95,12 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerContent.deleteContent.bind(handlerContent)
   );
+  // contentRouter.get(
+  //   "/filter",
+  //   handlerContent.getContentByFilter.bind(handlerContent)
+  // );
+
+  filterRouter.get("/", handlerContent.getContentByFilter.bind(handlerContent));
 
   //Comment API
   commentRouter.post(

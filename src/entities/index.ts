@@ -93,3 +93,9 @@ export interface IDeleteContent {
 export interface IDeleteComment {
   isArchive: boolean;
 }
+
+export interface IFilterContent {
+  province?: string;
+  ageLastSeenPeriod?: string;
+  gender?: string;
+}

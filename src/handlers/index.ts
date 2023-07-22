@@ -84,6 +84,10 @@ export interface IHandlerContent {
   getContent: HandlerFunc<JwtAuthRequest<WithContentId, Empty>>;
   updateContent: HandlerFunc<JwtAuthRequest<WithContentId, WithContentUpdate>>;
   deleteContent: HandlerFunc<JwtAuthRequest<WithContentId, WithContentDelete>>;
+  getContentByFilter(
+    req: Request<Empty, Empty, Empty, WithContentFilter>,
+    res: Response
+  ): Promise<Response>;
 }
 
 export interface WithComment {
@@ -120,4 +124,10 @@ export interface WithContentDelete {
 
 export interface WithCommentDelete {
   isArchive: boolean;
+}
+
+export interface WithContentFilter {
+  province: string;
+  ageLastSeenPeriod: string;
+  gender: string;
 }

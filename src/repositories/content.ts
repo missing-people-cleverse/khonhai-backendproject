@@ -4,6 +4,7 @@ import {
   IContent,
   ICreateContent,
   IDeleteContent,
+  IFilterContent,
   IUpdateContent,
 } from "../entities";
 
@@ -144,4 +145,64 @@ class RepositoryContent implements IRepositoryContent {
       data: { ...content },
     });
   }
+
+  async getContentByFilter(
+    content: IFilterContent,
+    ageStart: number,
+    ageEnd: number
+  ): Promise<IContent[]> {
+    return await this.db.content.findMany({
+      where: {
+        province: content.province,
+        gender: content.gender,
+        ageLastSeen: {
+          lte: ageEnd,
+          gte: ageStart,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            surname: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
+  //   return await this.db.content.findMany({
+  //     where: {
+  //       province: content.province,
+  //       ageLastSeen: content.ageLastSeen,
+  //       gender: content.gender,
+  //     },
+  //     include: {
+  //       user: {
+  //         select: {
+  //           id: true,
+  //           username: true,
+  //           name: true,
+  //           surname: true,
+  //         },
+  //       },
+  //       comments: {
+  //         select: {
+  //           id: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 }
+// ต่ำกว่า 10 ปี   เด็ก (น้อยกว่า 10 ปี)
+// 11 - 25 ปี    วัยรุ่น (11 - 25 ปี)
+// 26 - 60 ปี    ผู้ใหญ่ (26 - 60 ปี)
+// มากกว่า 60 ปี  ผู้สูงอายุ (61 ปี ขึ่นไป)
