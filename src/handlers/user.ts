@@ -63,7 +63,6 @@ class HandlerUser implements IHandlerUser {
     res: Response
   ): Promise<Response> {
     const userRegister: WithUser = req.body;
-    console.log(userRegister);
 
     if (
       !userRegister.username ||
@@ -92,7 +91,6 @@ class HandlerUser implements IHandlerUser {
         password: hashPassword(userRegister.password),
       })
       .then((user) => {
-        console.log(user.email);
         return res
           .status(201)
           .json({ ...user, password: undefined })
