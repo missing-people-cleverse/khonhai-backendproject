@@ -111,9 +111,6 @@ async function main() {
     handlerComment.createComment.bind(handlerComment)
   );
 
-  //getCommentbyontentId
-  commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
-
   commentRouter.patch(
     "/edit/:id",
     middleware.jwtMiddleware.bind(middleware),
@@ -124,6 +121,9 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.deleteComment.bind(handlerComment)
   );
+
+  //getCommentbyContentId
+  commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
 
   server.listen(port, () => console.log(`server listening on ${port}`));
 }
