@@ -95,7 +95,7 @@ export interface IDeleteComment {
 }
 
 export interface IFilterContent {
-  province: string;
-  ageLastSeenPeriod: string;
-  gender: string;
+  province?: string;
+  ageLastSeenPeriod?: string;
+  gender?: string;
 }
