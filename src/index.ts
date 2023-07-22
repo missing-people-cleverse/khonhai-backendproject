@@ -60,6 +60,12 @@ async function main() {
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
+  //Check Unique
+  userRouter.post(
+    "/register/checkusername",
+    handlerUser.checkUsername.bind(handlerUser)
+  );
+
   //User API
   userRouter.post("/register", handlerUser.register.bind(handlerUser));
   userRouter.post("/login", handlerUser.login.bind(handlerUser));
