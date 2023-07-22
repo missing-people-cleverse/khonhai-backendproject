@@ -82,6 +82,10 @@ class HandlerUser implements IHandlerUser {
         .end();
     }
 
+    await this.repoBlacklistUnique.addToBlacklistUsername(
+      userRegister.username
+    );
+
     return this.repo
       .createUser({
         ...userRegister,
