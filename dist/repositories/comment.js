@@ -43,9 +43,9 @@ class RepositoryComment {
             },
         });
     }
-    // unused
-    async getComments() {
+    async getComment(id) {
         return await this.db.comment.findMany({
+            where: { contentId: id },
             include: {
                 user: {
                     select: {
@@ -53,13 +53,13 @@ class RepositoryComment {
                         username: true,
                         name: true,
                         surname: true,
+                        email: true,
+                        phoneNumber: true,
+                        address: true,
+                        province: true,
+                        postcode: true,
                     },
                 },
-                // content: {
-                //   select: {
-                //     id: true,
-                //   },
-                // },
             },
         });
     }
@@ -69,6 +69,7 @@ class RepositoryComment {
             data: { ...comment },
         });
     }
+    //comment Archive
     async deleteComment(id, comment) {
         return await this.db.comment.update({
             where: { id },

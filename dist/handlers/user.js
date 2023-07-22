@@ -14,6 +14,7 @@ class HandlerUser {
     }
     async register(req, res) {
         const userRegister = req.body;
+        console.log(userRegister);
         if (!userRegister.username ||
             !userRegister.password ||
             !userRegister.name ||
@@ -23,7 +24,10 @@ class HandlerUser {
             !userRegister.address ||
             !userRegister.province ||
             !userRegister.postcode) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         return this.repo
             .createUser({
@@ -39,7 +43,10 @@ class HandlerUser {
         })
             .catch((err) => res
             .status(500)
-            .json({ error: `failed to register user ${userRegister.username}` })
+            .json({
+            error: `failed to register user ${userRegister.username}: ${err}`,
+            statusCode: 500,
+        })
             .end());
     }
     async login(req, res) {
@@ -75,19 +82,19 @@ class HandlerUser {
             console.error(`failed to get user: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to get user: ${err}` })
+                .json({ error: `failed to get user: ${err}`, statusCode: 500 })
                 .end();
         });
     }
     async getUserDetail(req, res) {
-        const id = req.params.id;
+        const id = req.payload.id;
         return this.repo
             .getUserById(id)
             .then((user) => {
             if (!user) {
                 return res
                     .status(404)
-                    .json({ error: `no such user: ${id}` })
+                    .json({ error: `no such user: ${id}`, statusCode: 404 })
                     .end();
             }
             return res
@@ -98,7 +105,7 @@ class HandlerUser {
             .catch((err) => {
             const errMsg = `failed to get user Detail ${id}: ${err}`;
             console.error(errMsg);
-            return res.status(500).json({ error: errMsg }).end();
+            return res.status(500).json({ error: errMsg, statusCode: 500 }).end();
         });
     }
     async logout(req, res) {
@@ -109,7 +116,10 @@ class HandlerUser {
             console.error(err);
             return res
                 .status(500)
-                .json({ error: `couldn't log out with token ${req.token}` })
+                .json({
+                error: `couldn't log out with token ${req.token}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }

@@ -17,7 +17,7 @@ class RepositoryContent {
                         id: true,
                         username: true,
                         name: true,
-                        surname: true
+                        surname: true,
                     },
                 },
             },
@@ -62,6 +62,8 @@ class RepositoryContent {
                         username: true,
                         name: true,
                         surname: true,
+                        email: true,
+                        phoneNumber: true,
                     },
                 },
                 comments: {
@@ -72,6 +74,8 @@ class RepositoryContent {
                         foundDetail: true,
                         img: true,
                         isArchive: true,
+                        createdAt: true,
+                        updatedAt: true,
                     },
                 },
             },
@@ -84,6 +88,11 @@ class RepositoryContent {
         })
             .catch((err) => Promise.reject(`failed to get content ${id}: ${err}`));
     }
+    // id Int @id @default(autoincrement())
+    // contentId Int
+    // content Content @relation(fields: [contentId], references: [id])
+    // userId String
+    // user User @relation(fields: [userId], references: [id])
     //FE make condition to show Edit button
     async updateContent(id, content) {
         return await this.db.content.update({
@@ -101,6 +110,7 @@ class RepositoryContent {
             data: { ...content },
         });
     }
+    //content Archive
     async deleteContent(id, content) {
         return await this.db.content.update({
             where: { id },

@@ -93,3 +93,20 @@ export interface IDeleteContent {
 export interface IDeleteComment {
   isArchive: boolean;
 }
+
+// for s3
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const config: {
+  port: number;
+  aws_access_key_id: string;
+  aws_secret_access_key: string;
+  bucket_name: string;
+} = {
+  port: Number(process.env.PORT) ?? 8000,
+  aws_access_key_id: process.env.AWS_ACCESS_KEY_ID ?? " ",
+  aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY ?? "",
+  bucket_name: process.env.BUCKET_NAME ?? "khonhai-bucket",
+};

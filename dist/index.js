@@ -48,21 +48,25 @@ async function main() {
     //User API
     userRouter.post("/register", handlerUser.register.bind(handlerUser));
     userRouter.post("/login", handlerUser.login.bind(handlerUser));
-    userRouter.get("/me", middleware.jwtMiddleware.bind(middleware), handlerUser.login.bind(handlerUser));
-    userRouter.get("/:id", middleware.jwtMiddleware.bind(middleware), handlerUser.getUserDetail.bind(handlerUser));
+    // userRouter.get(
+    //   "/me",
+    //   middleware.jwtMiddleware.bind(middleware),
+    //   handlerUser.login.bind(handlerUser)
+    // );
+    userRouter.get("/", middleware.jwtMiddleware.bind(middleware), handlerUser.getUserDetail.bind(handlerUser));
     userRouter.post("/logout", middleware.jwtMiddleware.bind(middleware), handlerUser.logout.bind(handlerUser));
     //Content API
     contentRouter.post("/create", middleware.jwtMiddleware.bind(middleware), handlerContent.createContent.bind(handlerContent));
     contentRouter.get("/", handlerContent.getContents.bind(handlerContent));
     contentRouter.get("/:id", handlerContent.getContent.bind(handlerContent));
     contentRouter.patch("/edit/:id", middleware.jwtMiddleware.bind(middleware), handlerContent.updateContent.bind(handlerContent));
-    contentRouter.delete("/delete/:id", middleware.jwtMiddleware.bind(middleware), handlerContent.deleteContent.bind(handlerContent));
+    contentRouter.patch("/delete/:id", middleware.jwtMiddleware.bind(middleware), handlerContent.deleteContent.bind(handlerContent));
     //Comment API
     commentRouter.post("/:id", middleware.jwtMiddleware.bind(middleware), handlerComment.createComment.bind(handlerComment));
-    // unused
-    commentRouter.get("/", handlerComment.getComments.bind(handlerComment));
+    //getCommentbyontentId
+    commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
     commentRouter.patch("/edit/:id", middleware.jwtMiddleware.bind(middleware), handlerComment.updateComment.bind(handlerComment));
-    commentRouter.delete("/delete/:id", middleware.jwtMiddleware.bind(middleware), handlerComment.deleteComment.bind(handlerComment));
+    commentRouter.patch("/delete/:id", middleware.jwtMiddleware.bind(middleware), handlerComment.deleteComment.bind(handlerComment));
     server.listen(port, () => console.log(`server listening on ${port}`));
 }
 main();
