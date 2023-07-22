@@ -36,3 +36,12 @@ export interface IRepositoryComment {
   updateComment(id: number, comment: IUpdateComment): Promise<IComment>;
   deleteComment(id: number, comment: IDeleteComment): Promise<IDeleteComment>;
 }
+
+export interface IRepositoryBlacklistUnique {
+  addToBlacklistUsername(username: string): Promise<void>;
+  isBlacklistUsername(username: string): Promise<boolean>;
+  addToBlacklistEmail(email: string): Promise<void>;
+  isBlacklistEmail(email: string): Promise<boolean>;
+  addToBlacklistPhoneNumber(phoneNumber: string): Promise<void>;
+  isBlacklistPhoneNumber(phoneNumber: string): Promise<boolean>;
+}

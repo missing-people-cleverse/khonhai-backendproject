@@ -1,10 +1,21 @@
 import { compareHash, hashPassword } from "../auth/bcrypt";
 
 import { Response } from "express";
-import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
-import { AppRequest, Empty, IHandlerUser, WithUser } from ".";
+import {
+  IRepositoryBlacklist,
+  IRepositoryBlacklistUnique,
+  IRepositoryUser,
+} from "../repositories";
+import {
+  AppRequest,
+  Empty,
+  IHandlerUser,
+  WithEmailCheck,
+  WithPhoneNumberCheck,
+  WithUser,
+  WithUsernameCheck,
+} from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
-import { IRepositoryBlacklistUnique } from "../repositories/unique";
 
 export function newHandlerUser(
   repo: IRepositoryUser,
@@ -14,9 +25,6 @@ export function newHandlerUser(
   return new HandlerUser(repo, repoBlacklist, repoBlacklistUnique);
 }
 
-export interface WithUsernameCheck {
-  username: string;
-}
 class HandlerUser implements IHandlerUser {
   private repo: IRepositoryUser;
   private repoBlacklist: IRepositoryBlacklist;
@@ -39,12 +47,9 @@ class HandlerUser implements IHandlerUser {
   ): Promise<Response> {
     const username = req.body.username;
 
-    const isBlacklistedUsername =
-      await this.repoBlacklistUnique.isBlacklistUsername(username);
-
     return this.repoBlacklistUnique
       .isBlacklistUsername(username)
-      .then((username) => {
+      .then((isBlacklistedUsername) => {
         return res.status(201).json({ isBlacklistedUsername }).end();
       })
       .catch((err) =>
@@ -52,6 +57,52 @@ class HandlerUser implements IHandlerUser {
           .status(500)
           .json({
             error: `failed to check username ${username}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
+  }
+
+  //check unique Email
+  async checkEmail(
+    req: AppRequest<Empty, WithEmailCheck>,
+    res: Response
+  ): Promise<Response> {
+    const email = req.body.email;
+
+    return this.repoBlacklistUnique
+      .isBlacklistEmail(email)
+      .then((isBlacklistedEmail) => {
+        return res.status(201).json({ isBlacklistedEmail }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check email ${email}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
+  }
+
+  //check unique phoneNumber
+  async checkPhoneNumber(
+    req: AppRequest<Empty, WithPhoneNumberCheck>,
+    res: Response
+  ): Promise<Response> {
+    const phoneNumber = req.body.phoneNumber;
+
+    return this.repoBlacklistUnique
+      .isBlacklistPhoneNumber(phoneNumber)
+      .then((isBlacklistedPhoneNumber) => {
+        return res.status(201).json({ isBlacklistedPhoneNumber }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check phoneNumber ${phoneNumber}: ${err}`,
             statusCode: 500,
           })
           .end()
@@ -83,6 +134,12 @@ class HandlerUser implements IHandlerUser {
 
     await this.repoBlacklistUnique.addToBlacklistUsername(
       userRegister.username
+    );
+
+    await this.repoBlacklistUnique.addToBlacklistEmail(userRegister.email);
+
+    await this.repoBlacklistUnique.addToBlacklistPhoneNumber(
+      userRegister.phoneNumber
     );
 
     return this.repo

@@ -60,10 +60,18 @@ async function main() {
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
-  //Check Unique
+  //Check Unique User Info
   userRouter.post(
     "/register/checkusername",
     handlerUser.checkUsername.bind(handlerUser)
+  );
+  userRouter.post(
+    "/register/checkemail",
+    handlerUser.checkEmail.bind(handlerUser)
+  );
+  userRouter.post(
+    "/register/checkphonenumber",
+    handlerUser.checkPhoneNumber.bind(handlerUser)
   );
 
   //User API

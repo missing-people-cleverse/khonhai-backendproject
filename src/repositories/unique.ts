@@ -1,18 +1,10 @@
 import { RedisClientType } from "redis";
+import { IRepositoryBlacklistUnique } from ".";
 
 export function newRepositoryBlacklistUnique(
   db: RedisClientType<any, any, any>
 ): IRepositoryBlacklistUnique {
   return new RepositoryUnique(db);
-}
-
-export interface IRepositoryBlacklistUnique {
-  addToBlacklistUsername(username: string): Promise<void>;
-  isBlacklistUsername(username: string): Promise<boolean>;
-  addToBlacklistEmail(email: string): Promise<void>;
-  isBlacklistEmail(email: string): Promise<boolean>;
-  addToBlacklistPhoneNumber(phoneNumber: string): Promise<void>;
-  isBlacklistPhoneNumber(phoneNumber: string): Promise<boolean>;
 }
 
 const keyUsername = "username";
