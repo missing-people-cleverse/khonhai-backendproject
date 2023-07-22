@@ -11,7 +11,33 @@ class HandlerContent {
     }
     async createContent(req, res) {
         const content = req.body;
-        //user has to fill every details of content
+        // const keyInfo = [
+        //   "ageLastSeen",
+        //   "dateOfBirth",
+        //   "gender",
+        //   "height",
+        //   "img",
+        //   "missingDatetime",
+        //   "missingDetail",
+        //   "name",
+        //   "nationality",
+        //   "nickname",
+        //   "place",
+        //   "province",
+        //   "remark",
+        //   "skin",
+        //   "status",
+        //   "surname",
+        //   "weight",
+        // ];
+        // console.log(keyInfo);
+        // const checkInfo = keyInfo.every(
+        //   (check) => content[check] !== undefined && content[check] !== null
+        // );
+        // console.log(checkInfo);
+        // if (!checkInfo) {
+        //   return res.status(400).json({ error: "missing information" }).end();
+        // }
         if (!content.ageLastSeen ||
             !content.dateOfBirth ||
             !content.gender ||
@@ -29,7 +55,10 @@ class HandlerContent {
             !content.status ||
             !content.surname ||
             !content.weight) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         const userId = req.payload.id;
         return this.repo
@@ -39,7 +68,7 @@ class HandlerContent {
             console.error(`failed to create content: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to create content: ${err}` })
+                .json({ error: `failed to create content: ${err}`, statusCode: 500 })
                 .end();
         });
     }
@@ -51,7 +80,7 @@ class HandlerContent {
             console.error(`failed to get contents: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to get contents : ${err}` })
+                .json({ error: `failed to get contents : ${err}`, statusCode: 500 })
                 .end();
         });
     }
@@ -60,14 +89,17 @@ class HandlerContent {
         if (isNaN(id)) {
             return res
                 .status(400)
-                .json({ error: `id ${id} is not a number` })
+                .json({ error: `id ${id} is not a number`, statusCode: 400 })
                 .end();
         }
         return this.repo
             .getContent(id)
             .then((content) => {
             if (!content) {
-                return res.status(404).json(`no such content: ${id}`).end();
+                return res
+                    .status(404)
+                    .json({ error: `no such content: ${id}`, statusCode: 404 })
+                    .end();
             }
             return res.status(201).json(content).end();
         })
@@ -75,7 +107,10 @@ class HandlerContent {
             console.error(`failed to get content ${id}: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to get content ${id}: ${err}` })
+                .json({
+                error: `failed to get content ${id}: ${err}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }
@@ -84,7 +119,7 @@ class HandlerContent {
         if (isNaN(id)) {
             return res
                 .status(400)
-                .json({ error: `id ${id} is not a number` })
+                .json({ error: `id ${id} is not a number`, statusCode: 400 })
                 .end();
         }
         const content = req.body;
@@ -107,7 +142,10 @@ class HandlerContent {
             !content.status ||
             !content.surname ||
             !content.weight) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         return this.repo
             .updateContent(id, { ...content })
@@ -116,22 +154,29 @@ class HandlerContent {
             console.error(`failed to update content ${id}: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to update content ${id}: ${err}` })
+                .json({
+                error: `failed to update content ${id}: ${err}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }
+    //content Archive
     async deleteContent(req, res) {
         const id = Number(req.params.id);
         if (isNaN(id)) {
             return res
                 .status(400)
-                .json({ error: `id ${id} is not a number` })
+                .json({ error: `id ${id} is not a number`, statusCode: 400 })
                 .end();
         }
         const content = req.body;
         //user has to fill every details of delete content
         if (!content.isArchive || !content.status) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         return this.repo
             .deleteContent(id, { ...content })
@@ -140,7 +185,10 @@ class HandlerContent {
             console.error(`failed to delete content ${id}: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to delete content ${id}: ${err}` })
+                .json({
+                error: `failed to delete content ${id}: ${err}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }

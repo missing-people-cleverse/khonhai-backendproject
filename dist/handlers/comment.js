@@ -16,14 +16,17 @@ class HandlerComment {
             !comment.foundDetail ||
             !comment.foundPlace ||
             !comment.img) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         const userId = req.payload.id;
         const contentId = Number(req.params.id);
         if (isNaN(contentId)) {
             return res
                 .status(400)
-                .json({ error: `id ${contentId} is not a number` })
+                .json({ error: `id ${contentId} is not a number`, statusCode: 400 })
                 .end();
         }
         return this.repo
@@ -33,20 +36,26 @@ class HandlerComment {
             console.error(`failed to create comment: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to create comment: ${err}` })
+                .json({ error: `failed to create comment: ${err}`, statusCode: 500 })
                 .end();
         });
     }
-    // unused
-    async getComments(req, res) {
+    async getComment(req, res) {
+        const contentId = Number(req.params.id);
+        if (isNaN(contentId)) {
+            return res
+                .status(400)
+                .json({ error: `id ${contentId} is not a number`, statusCode: 400 })
+                .end();
+        }
         return this.repo
-            .getComments()
-            .then((comments) => res.status(201).json(comments).end())
+            .getComment(contentId)
+            .then((comment) => res.status(201).json(comment).end())
             .catch((err) => {
-            console.error(`failed to get comments: ${err}`);
+            console.error(`failed to get comment: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to get comments: ${err}` })
+                .json({ error: `failed to get comment: ${err}`, statusCode: 500 })
                 .end();
         });
     }
@@ -55,7 +64,7 @@ class HandlerComment {
         if (isNaN(id)) {
             return res
                 .status(400)
-                .json({ error: `id ${id} is not a number` })
+                .json({ error: `id ${id} is not a number`, statusCode: 400 })
                 .end();
         }
         const comment = req.body;
@@ -64,7 +73,10 @@ class HandlerComment {
             !comment.foundDetail ||
             !comment.foundPlace ||
             !comment.img) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         return this.repo
             .updateComment(id, { ...comment })
@@ -73,22 +85,29 @@ class HandlerComment {
             console.error(`failed to update comment ${id}: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to update comment ${id}: ${err}` })
+                .json({
+                error: `failed to update comment ${id}: ${err}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }
+    //comment Archive
     async deleteComment(req, res) {
         const id = Number(req.params.id);
         if (isNaN(id)) {
             return res
                 .status(400)
-                .json({ error: `id ${id} is not a number` })
+                .json({ error: `id ${id} is not a number`, statusCode: 400 })
                 .end();
         }
         const comment = req.body;
         //user has to fill every details of delete conmment
         if (!comment.isArchive) {
-            return res.status(400).json({ error: "missing information" }).end();
+            return res
+                .status(400)
+                .json({ error: "missing information", statusCode: 400 })
+                .end();
         }
         return this.repo
             .deleteComment(id, { ...comment })
@@ -97,7 +116,10 @@ class HandlerComment {
             console.error(`failed to delete comment ${id}: ${err}`);
             return res
                 .status(500)
-                .json({ error: `failed to delete comment ${id}: ${err}` })
+                .json({
+                error: `failed to delete comment ${id}: ${err}`,
+                statusCode: 500,
+            })
                 .end();
         });
     }
