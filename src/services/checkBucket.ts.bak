@@ -1,0 +1,72 @@
+import { S3 } from "aws-sdk";
+import { config } from "../entities/index";
+import { CreateBucketRequest } from "aws-sdk/clients/s3";
+
+/*
+ * @name checkBucket
+ * @param {S3} s3
+ * @returns {Promise<{success:boolean; message: string; data:string;}>}
+ checkBucket: It’s a function that checks if the bucket with the current name has already existed in Amazon S3.
+ */
+const checkBucket = async (s3: S3, bucket: string) => {
+  try {
+    const res = await s3.headBucket({ Bucket: bucket }).promise();
+
+    console.log("Bucket already Exist", res.$response.data);
+
+    return { success: true, message: "Bucket already Exist", data: {} };
+  } catch (error) {
+    console.log("Error bucket don't exsit", error);
+
+    return { success: false, message: "Error bucket don't exsit", data: error };
+  }
+};
+
+/*
+ * @name createBucket
+  * @param {S3} s3
+  * @returns {Promise<{success:boolean; message: string; data: string;}>}
+  createBucket: It’s also a function, but this one creates a bucket in Amazon S3 with the name provided in .env file in a specific region.
+*/
+
+const createBucket = async (s3: S3) => {
+  const params: CreateBucketRequest = {
+    Bucket: config.bucket_name,
+    CreateBucketConfiguration: {
+      // Set your region here
+      LocationConstraint: "ap-southeast-1",
+    },
+  };
+
+  try {
+    const res = await s3.createBucket(params).promise();
+
+    console.log("Bucket Created Successfull", res.Location);
+
+    return {
+      success: true,
+      message: "Bucket Created Successfull",
+      data: res.Location,
+    };
+  } catch (error) {
+    console.log("Error: Unable to create bucket \n", error);
+
+    return { success: false, message: "Unable to create bucket", data: error };
+  }
+};
+
+/*
+ * @name initBucket
+ * @returns {void}
+ Before implementing the controller, we need a function that initializes the bucket.
+ This function must before creating a bucket check if it exists.
+ */
+export const initBucket = async (s3: S3) => {
+  const bucketStatus = await checkBucket(s3, config.bucket_name);
+
+  if (!bucketStatus.success) {
+    // check if the bucket don't exist
+    let bucket = await createBucket(s3); // create new bucket
+    console.log(bucket.message);
+  }
+};

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IRepositoryBlacklist } from "../repositories";
-import multer, { FileFilterCallback } from "multer";
+import multer from "multer";
 import crypto from "crypto";
 
 export interface Payload {
@@ -100,18 +100,18 @@ export const multerConfig = {
     },
   }),
 
-  fileFilter: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: FileFilterCallback
-  ) => {
-    // if (
-    //   file.mimetype === "image/jpeg" ||
-    //   file.mimetype === "image/png" ||
-    //   file.mimetype === "image/jpg"
-    // ) {
-    //   return cb(null, false);
-    // }
-    cb(null, true);
-  },
+  //   fileFilter: (
+  //     req: Request,
+  //     file: Express.Multer.File,
+  //     cb: FileFilterCallback
+  //   ) => {
+  //     // if (
+  //     //   file.mimetype === "image/jpeg" ||
+  //     //   file.mimetype === "image/png" ||
+  //     //   file.mimetype === "image/jpg"
+  //     // ) {
+  //     //   return cb(null, false);
+  //     // }
+  //     cb(null, true);
+  //   },
 };

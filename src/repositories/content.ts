@@ -33,6 +33,7 @@ class RepositoryContent implements IRepositoryContent {
       data: {
         ...content,
         userId: undefined,
+        img: content.img,
         user: {
           connect: {
             id: content.userId,

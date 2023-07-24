@@ -14,7 +14,6 @@ import { newRepositoryComment } from "./repositories/comment";
 import { newHandlerComment } from "./handlers/comment";
 
 // S3
-import { UploadController } from "./controllers";
 import multer from "multer";
 
 async function main() {
@@ -84,6 +83,13 @@ async function main() {
   contentRouter.post(
     "/create",
     middleware.jwtMiddleware.bind(middleware),
+    handlerContent.createContent.bind(handlerContent)
+  );
+  contentRouter.post(
+    "/createimg",
+    middleware.jwtMiddleware.bind(middleware),
+    upload.single("img"),
+    // UploadController.Upload.bind(upload),
     handlerContent.createContent.bind(handlerContent)
   );
   contentRouter.get("/", handlerContent.getContents.bind(handlerContent));
