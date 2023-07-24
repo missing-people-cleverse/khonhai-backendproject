@@ -24,8 +24,9 @@ export const uploadToS3 = async (s3: S3, fileData?: Express.Multer.File) => {
 
     const params = {
       Bucket: config.bucket_name,
-      Key: fileData!.originalname,
+      Key: fileData!.filename,
       Body: fileContent,
+      ContentType: fileData!.mimetype,
     };
 
     try {

@@ -4,7 +4,7 @@ import { createBucket } from "./createBucket";
 
 import { config } from "../entities/index";
 
-/**
+/*
  * @name initBucket
  * @returns {void}
  Before implementing the controller, we need a function that initializes the bucket.

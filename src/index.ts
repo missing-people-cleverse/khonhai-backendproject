@@ -125,7 +125,7 @@ async function main() {
   // Image API
   imageRouter.post(
     "/",
-    middleware.jwtMiddleware.bind(middleware),
+    // middleware.jwtMiddleware.bind(middleware),
     upload.single("uploaded_file"),
     UploadController.Upload.bind(upload)
   );

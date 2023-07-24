@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IRepositoryBlacklist } from "../repositories";
 import multer, { FileFilterCallback } from "multer";
+import crypto from "crypto";
 
 export interface Payload {
   id: string;
@@ -85,6 +86,8 @@ class MiddlewareHandler {
 
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
+const generateFileName = crypto.randomBytes(32).toString("hex");
+
 export const multerConfig = {
   storage: multer.diskStorage({
     destination: "uploads/",
@@ -93,7 +96,7 @@ export const multerConfig = {
       file: Express.Multer.File,
       cb: FileNameCallback
     ) {
-      cb(null, file.originalname);
+      cb(null, generateFileName);
     },
   }),
 
@@ -102,13 +105,13 @@ export const multerConfig = {
     file: Express.Multer.File,
     cb: FileFilterCallback
   ) => {
-    if (
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg"
-    ) {
-      return cb(null, false);
-    }
+    // if (
+    //   file.mimetype === "image/jpeg" ||
+    //   file.mimetype === "image/png" ||
+    //   file.mimetype === "image/jpg"
+    // ) {
+    //   return cb(null, false);
+    // }
     cb(null, true);
   },
 };
