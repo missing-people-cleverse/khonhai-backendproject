@@ -10,7 +10,24 @@ import {
 import { JwtAuthRequest } from "../auth/jwt";
 import { IRepositoryContent } from "../repositories";
 import crypto from "crypto";
-import { bucketName, region, s3 } from "../config/aws.config";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+// link to env
+const bucketName = (process.env.AWS_BUCKET_NAME as string) ?? "khonhai-bucket";
+const region = (process.env.AWS_BUCKET_REGION as string) ?? "ap-southeast-1";
+const accessKeyId = process.env.AWS_ACCESS_KEY as string;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY as string;
+
+const s3Client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
+  },
+});
 
 export function newHandlerContent(
   repoContent: IRepositoryContent
@@ -29,83 +46,44 @@ class HandlerContent implements IHandlerContent {
     req: JwtAuthRequest<Empty, WithContent>,
     res: Response
   ): Promise<Response> {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-    let content: WithContent = req.body;
-    content.img = req.file as any;
-
-    // const keyInfo = [
-    //   "ageLastSeen",
-    //   "dateOfBirth",
-    //   "gender",
-    //   "height",
-    //   "img",
-    //   "missingDatetime",
-    //   "missingDetail",
-    //   "name",
-    //   "nationality",
-    //   "nickname",
-    //   "place",
-    //   "province",
-    //   "remark",
-    //   "skin",
-    //   "status",
-    //   "surname",
-    //   "weight",
-    // ];
-    // console.log(keyInfo);
-
-    // const checkInfo = keyInfo.every(
-    //   (check) => content[check] !== undefined && content[check] !== null
-    // );
-    // console.log(checkInfo);
-
-    // if (!checkInfo) {
-    //   return res.status(400).json({ error: "missing information" }).end();
+    // if (!req.file) {
+    //   return res.status(400).json({ message: "No file uploaded" });
     // }
+    const userId = req.payload.id;
+    const content: WithContent = {
+      ...req.body,
+      weight: Number(req.body.weight),
+      height: Number(req.body.height),
+      ageLastSeen: Number(req.body.ageLastSeen),
+    };
 
-    if (
-      !content.ageLastSeen ||
-      !content.dateOfBirth ||
-      !content.gender ||
-      !content.height ||
-      !content.img ||
-      !content.missingDatetime ||
-      !content.missingDetail ||
-      !content.name ||
-      !content.nationality ||
-      !content.nickname ||
-      !content.place ||
-      !content.province ||
-      !content.remark ||
-      !content.skin ||
-      !content.status ||
-      !content.surname ||
-      !content.weight
-    ) {
-      return res
-        .status(400)
-        .json({ error: "missing information", statusCode: 400 })
-        .end();
+    const files: any = req.files;
+    if (!files || files.length === 0) {
+      return res.status(400).json({ message: "No files uploaded" });
     }
 
-    const userId = req.payload.id;
+    const imgUrls: string[] = [];
+    console.log("files", files);
+    for (const file of files.photos) {
+      console.log("file", file);
+      const generateFileName = crypto.randomBytes(32).toString("hex");
+      const img = generateFileName;
+      const uploadParams = {
+        Bucket: bucketName,
+        Body: file?.buffer,
+        Key: img,
+        ContentType: file?.mimetype,
+      };
+      s3Client.send(new PutObjectCommand(uploadParams));
+      const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
+      imgUrls.push(imgUrl);
+    }
+    if (!imgUrls || imgUrls.length === 0) {
+      return res.status(400).json({ message: "No img urls" });
+    }
 
-    // img
-    const generateFileName = crypto.randomBytes(32).toString("hex");
-    const fileName = generateFileName;
-    const fileData = {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: req.file.buffer,
-      ContentType: req.file.mimetype,
-      ACL: "public-read", // Set the access permissions as required
-    };
-    s3.upload(fileData).promise();
-    const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
     return this.repo
-      .createContent({ ...content, userId, img: fileUrl })
+      .createContent({ ...content, userId, img: imgUrls })
       .then((content) => res.status(201).json(content).end())
       .catch((err) => {
         console.error(`failed to create content: ${err}`);

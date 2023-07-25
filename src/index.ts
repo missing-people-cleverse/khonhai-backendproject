@@ -36,7 +36,9 @@ async function main() {
   const handlerContent = newHandlerContent(repoContent);
 
   const middleware = newMiddlewareHandler(repoBlacklist);
-  const upload = multer({ dest: "uploads/" });
+
+  const storage = multer.memoryStorage();
+  const upload = multer({ storage: storage });
 
   const repoComment = newRepositoryComment(db);
   const handlerComment = newHandlerComment(repoComment);
@@ -87,6 +89,12 @@ async function main() {
     "/createimg",
     middleware.jwtMiddleware.bind(middleware),
     upload.single("photo"),
+    handlerContent.createContent.bind(handlerContent)
+  );
+  contentRouter.post(
+    "/createimgs",
+    middleware.jwtMiddleware.bind(middleware),
+    upload.fields([{ name: "photos", maxCount: 3 }]),
     handlerContent.createContent.bind(handlerContent)
   );
   contentRouter.get("/", handlerContent.getContents.bind(handlerContent));

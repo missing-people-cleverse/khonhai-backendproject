@@ -41,7 +41,7 @@ export interface WithContent {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -62,7 +62,7 @@ export interface WithContentUpdate {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -90,7 +90,7 @@ export interface WithComment {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 
@@ -102,7 +102,7 @@ export interface WithCommentUpdate {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 
