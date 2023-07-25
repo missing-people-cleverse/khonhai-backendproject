@@ -6,13 +6,17 @@ import { newRepositoryUser } from "./repositories/user";
 import { newRepositoryBlacklist } from "./repositories/blacklist";
 import { newHandlerUser } from "./handlers/user";
 
-import { newMiddlewareHandler } from "./auth/jwt";
+import { multerConfig, newMiddlewareHandler } from "./auth/jwt";
 
 import { newRepositoryContent } from "./repositories/content";
 import { newHandlerContent } from "./handlers/content";
 import { newRepositoryComment } from "./repositories/comment";
 import { newHandlerComment } from "./handlers/comment";
 import { newRepositoryBlacklistUnique } from "./repositories/unique";
+
+// S3
+import { UploadController } from "./controllers";
+import multer from "multer";
 
 async function main() {
   const db = new PrismaClient();
@@ -39,6 +43,7 @@ async function main() {
   const handlerContent = newHandlerContent(repoContent);
 
   const middleware = newMiddlewareHandler(repoBlacklist);
+  const upload = multer(multerConfig);
 
   const repoComment = newRepositoryComment(db);
   const handlerComment = newHandlerComment(repoComment);
@@ -49,6 +54,7 @@ async function main() {
   const userRouter = express.Router();
   const contentRouter = express.Router();
   const commentRouter = express.Router();
+  const imageRouter = express.Router();
 
   var cors = require("cors");
   server.use(cors());
@@ -57,6 +63,7 @@ async function main() {
   server.use("/user", userRouter);
   server.use("/content", contentRouter);
   server.use("/comment", commentRouter);
+  server.use("/upload", imageRouter);
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
@@ -129,6 +136,19 @@ async function main() {
   commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
 
   server.listen(port, () => console.log(`server listening on ${port}`));
+
+  // Image API
+  imageRouter.post(
+    "/",
+    middleware.jwtMiddleware.bind(middleware),
+    upload.single("uploaded_file"),
+    UploadController.Upload.bind(upload)
+  );
+  imageRouter.get("/", (req, res) => {
+    res
+      .status(200)
+      .json({ success: true, message: "Upload S3 Service is ready" });
+  });
 }
 
 main();
