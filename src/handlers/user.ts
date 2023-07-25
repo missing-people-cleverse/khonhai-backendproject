@@ -1,23 +1,112 @@
 import { compareHash, hashPassword } from "../auth/bcrypt";
 
 import { Response } from "express";
-import { IRepositoryBlacklist, IRepositoryUser } from "../repositories";
-import { AppRequest, Empty, IHandlerUser, WithUser } from ".";
+import {
+  IRepositoryBlacklist,
+  IRepositoryBlacklistUnique,
+  IRepositoryUser,
+} from "../repositories";
+import {
+  AppRequest,
+  Empty,
+  IHandlerUser,
+  WithEmailCheck,
+  WithPhoneNumberCheck,
+  WithUser,
+  WithUsernameCheck,
+} from ".";
 import { JwtAuthRequest, Payload, newJwt } from "../auth/jwt";
 
 export function newHandlerUser(
   repo: IRepositoryUser,
-  repoBlacklist: IRepositoryBlacklist
+  repoBlacklist: IRepositoryBlacklist,
+  repoBlacklistUnique: IRepositoryBlacklistUnique
 ): IHandlerUser {
-  return new HandlerUser(repo, repoBlacklist);
+  return new HandlerUser(repo, repoBlacklist, repoBlacklistUnique);
 }
+
 class HandlerUser implements IHandlerUser {
   private repo: IRepositoryUser;
   private repoBlacklist: IRepositoryBlacklist;
+  private repoBlacklistUnique: IRepositoryBlacklistUnique;
 
-  constructor(repo: IRepositoryUser, repoBlacklist: IRepositoryBlacklist) {
+  constructor(
+    repo: IRepositoryUser,
+    repoBlacklist: IRepositoryBlacklist,
+    repoBlacklistUnique: IRepositoryBlacklistUnique
+  ) {
     this.repo = repo;
     this.repoBlacklist = repoBlacklist;
+    this.repoBlacklistUnique = repoBlacklistUnique;
+  }
+
+  //check unique Username
+  async checkUsername(
+    req: AppRequest<Empty, WithUsernameCheck>,
+    res: Response
+  ): Promise<Response> {
+    const username = req.body.username;
+
+    return this.repoBlacklistUnique
+      .isBlacklistUsername(username)
+      .then((isBlacklistedUsername) => {
+        return res.status(201).json({ isBlacklistedUsername }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check username ${username}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
+  }
+
+  //check unique Email
+  async checkEmail(
+    req: AppRequest<Empty, WithEmailCheck>,
+    res: Response
+  ): Promise<Response> {
+    const email = req.body.email;
+
+    return this.repoBlacklistUnique
+      .isBlacklistEmail(email)
+      .then((isBlacklistedEmail) => {
+        return res.status(201).json({ isBlacklistedEmail }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check email ${email}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
+  }
+
+  //check unique phoneNumber
+  async checkPhoneNumber(
+    req: AppRequest<Empty, WithPhoneNumberCheck>,
+    res: Response
+  ): Promise<Response> {
+    const phoneNumber = req.body.phoneNumber;
+
+    return this.repoBlacklistUnique
+      .isBlacklistPhoneNumber(phoneNumber)
+      .then((isBlacklistedPhoneNumber) => {
+        return res.status(201).json({ isBlacklistedPhoneNumber }).end();
+      })
+      .catch((err) =>
+        res
+          .status(500)
+          .json({
+            error: `failed to check phoneNumber ${phoneNumber}: ${err}`,
+            statusCode: 500,
+          })
+          .end()
+      );
   }
 
   async register(
@@ -25,7 +114,6 @@ class HandlerUser implements IHandlerUser {
     res: Response
   ): Promise<Response> {
     const userRegister: WithUser = req.body;
-    console.log(userRegister);
 
     if (
       !userRegister.username ||
@@ -44,13 +132,22 @@ class HandlerUser implements IHandlerUser {
         .end();
     }
 
+    await this.repoBlacklistUnique.addToBlacklistUsername(
+      userRegister.username
+    );
+
+    await this.repoBlacklistUnique.addToBlacklistEmail(userRegister.email);
+
+    await this.repoBlacklistUnique.addToBlacklistPhoneNumber(
+      userRegister.phoneNumber
+    );
+
     return this.repo
       .createUser({
         ...userRegister,
         password: hashPassword(userRegister.password),
       })
       .then((user) => {
-        console.log(user.email);
         return res
           .status(201)
           .json({ ...user, password: undefined })

@@ -12,6 +12,7 @@ import { newRepositoryContent } from "./repositories/content";
 import { newHandlerContent } from "./handlers/content";
 import { newRepositoryComment } from "./repositories/comment";
 import { newHandlerComment } from "./handlers/comment";
+import { newRepositoryBlacklistUnique } from "./repositories/unique";
 
 // S3
 import multer from "multer";
@@ -30,7 +31,12 @@ async function main() {
 
   const repoUser = newRepositoryUser(db);
   const repoBlacklist = newRepositoryBlacklist(redis);
-  const handlerUser = newHandlerUser(repoUser, repoBlacklist);
+  const repoBlacklistUnique = newRepositoryBlacklistUnique(redis);
+  const handlerUser = newHandlerUser(
+    repoUser,
+    repoBlacklist,
+    repoBlacklistUnique
+  );
 
   const repoContent = newRepositoryContent(db);
   const handlerContent = newHandlerContent(repoContent);
@@ -60,14 +66,23 @@ async function main() {
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
+  //Check Unique User Info
+  userRouter.post(
+    "/register/checkusername",
+    handlerUser.checkUsername.bind(handlerUser)
+  );
+  userRouter.post(
+    "/register/checkemail",
+    handlerUser.checkEmail.bind(handlerUser)
+  );
+  userRouter.post(
+    "/register/checkphonenumber",
+    handlerUser.checkPhoneNumber.bind(handlerUser)
+  );
+
   //User API
   userRouter.post("/register", handlerUser.register.bind(handlerUser));
   userRouter.post("/login", handlerUser.login.bind(handlerUser));
-  // userRouter.get(
-  //   "/me",
-  //   middleware.jwtMiddleware.bind(middleware),
-  //   handlerUser.login.bind(handlerUser)
-  // );
   userRouter.get(
     "/",
     middleware.jwtMiddleware.bind(middleware),
@@ -117,9 +132,6 @@ async function main() {
     handlerComment.createComment.bind(handlerComment)
   );
 
-  //getCommentbyontentId
-  commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
-
   commentRouter.patch(
     "/edit/:id",
     middleware.jwtMiddleware.bind(middleware),
@@ -130,6 +142,9 @@ async function main() {
     middleware.jwtMiddleware.bind(middleware),
     handlerComment.deleteComment.bind(handlerComment)
   );
+
+  //getCommentbyContentId
+  commentRouter.get("/:id", handlerComment.getComment.bind(handlerComment));
 
   server.listen(port, () => console.log(`server listening on ${port}`));
 }
