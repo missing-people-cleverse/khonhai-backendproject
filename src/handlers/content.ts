@@ -9,6 +9,8 @@ import {
 } from ".";
 import { JwtAuthRequest } from "../auth/jwt";
 import { IRepositoryContent } from "../repositories";
+import crypto from "crypto";
+import { bucketName, region, s3 } from "../config/aws.config";
 
 export function newHandlerContent(
   repoContent: IRepositoryContent
@@ -27,7 +29,11 @@ class HandlerContent implements IHandlerContent {
     req: JwtAuthRequest<Empty, WithContent>,
     res: Response
   ): Promise<Response> {
-    const content: WithContent = req.body;
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    let content: WithContent = req.body;
+    content.img = req.file as any;
 
     // const keyInfo = [
     //   "ageLastSeen",
@@ -86,8 +92,20 @@ class HandlerContent implements IHandlerContent {
 
     const userId = req.payload.id;
 
+    // img
+    const generateFileName = crypto.randomBytes(32).toString("hex");
+    const fileName = generateFileName;
+    const fileData = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+      ACL: "public-read", // Set the access permissions as required
+    };
+    s3.upload(fileData).promise();
+    const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
     return this.repo
-      .createContent({ ...content, userId })
+      .createContent({ ...content, userId, img: fileUrl })
       .then((content) => res.status(201).json(content).end())
       .catch((err) => {
         console.error(`failed to create content: ${err}`);

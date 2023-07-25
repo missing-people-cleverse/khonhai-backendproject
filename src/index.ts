@@ -6,7 +6,7 @@ import { newRepositoryUser } from "./repositories/user";
 import { newRepositoryBlacklist } from "./repositories/blacklist";
 import { newHandlerUser } from "./handlers/user";
 
-import { multerConfig, newMiddlewareHandler } from "./auth/jwt";
+import { newMiddlewareHandler } from "./auth/jwt";
 
 import { newRepositoryContent } from "./repositories/content";
 import { newHandlerContent } from "./handlers/content";
@@ -36,7 +36,7 @@ async function main() {
   const handlerContent = newHandlerContent(repoContent);
 
   const middleware = newMiddlewareHandler(repoBlacklist);
-  const upload = multer(multerConfig);
+  const upload = multer({ dest: "uploads/" });
 
   const repoComment = newRepositoryComment(db);
   const handlerComment = newHandlerComment(repoComment);
@@ -47,7 +47,6 @@ async function main() {
   const userRouter = express.Router();
   const contentRouter = express.Router();
   const commentRouter = express.Router();
-  const imageRouter = express.Router();
 
   var cors = require("cors");
   server.use(cors());
@@ -56,7 +55,6 @@ async function main() {
   server.use("/user", userRouter);
   server.use("/content", contentRouter);
   server.use("/comment", commentRouter);
-  server.use("/upload", imageRouter);
 
   server.get("/", (_, res) => res.status(200).json({ status: "ok" }).end());
 
@@ -88,8 +86,7 @@ async function main() {
   contentRouter.post(
     "/createimg",
     middleware.jwtMiddleware.bind(middleware),
-    upload.single("img"),
-    // UploadController.Upload.bind(upload),
+    upload.single("photo"),
     handlerContent.createContent.bind(handlerContent)
   );
   contentRouter.get("/", handlerContent.getContents.bind(handlerContent));
@@ -127,19 +124,6 @@ async function main() {
   );
 
   server.listen(port, () => console.log(`server listening on ${port}`));
-
-  // Image API
-  imageRouter.post(
-    "/",
-    // middleware.jwtMiddleware.bind(middleware),
-    upload.single("uploaded_file"),
-    UploadController.Upload.bind(upload)
-  );
-  imageRouter.get("/", (req, res) => {
-    res
-      .status(200)
-      .json({ success: true, message: "Upload S3 Service is ready" });
-  });
 }
 
 main();

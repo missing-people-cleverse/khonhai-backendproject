@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IRepositoryBlacklist } from "../repositories";
-import multer from "multer";
-import crypto from "crypto";
 
 export interface Payload {
   id: string;
@@ -80,38 +78,3 @@ class MiddlewareHandler {
     }
   }
 }
-
-// S3 multer middleware
-// import { Request } from "express";
-
-type FileNameCallback = (error: Error | null, filename: string) => void;
-
-const generateFileName = crypto.randomBytes(32).toString("hex");
-
-export const multerConfig = {
-  storage: multer.diskStorage({
-    destination: "uploads/",
-    filename: function (
-      req: Request,
-      file: Express.Multer.File,
-      cb: FileNameCallback
-    ) {
-      cb(null, generateFileName);
-    },
-  }),
-
-  //   fileFilter: (
-  //     req: Request,
-  //     file: Express.Multer.File,
-  //     cb: FileFilterCallback
-  //   ) => {
-  //     // if (
-  //     //   file.mimetype === "image/jpeg" ||
-  //     //   file.mimetype === "image/png" ||
-  //     //   file.mimetype === "image/jpg"
-  //     // ) {
-  //     //   return cb(null, false);
-  //     // }
-  //     cb(null, true);
-  //   },
-};
