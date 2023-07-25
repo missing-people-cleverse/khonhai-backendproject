@@ -77,11 +77,6 @@ async function main() {
   //User API
   userRouter.post("/register", handlerUser.register.bind(handlerUser));
   userRouter.post("/login", handlerUser.login.bind(handlerUser));
-  // userRouter.get(
-  //   "/me",
-  //   middleware.jwtMiddleware.bind(middleware),
-  //   handlerUser.login.bind(handlerUser)
-  // );
   userRouter.get(
     "/",
     middleware.jwtMiddleware.bind(middleware),
