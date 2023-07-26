@@ -88,8 +88,10 @@ export interface IUpdateComment {
 export interface IDeleteContent {
   isArchive: boolean;
   status: string;
+  img: string[];
 }
 
 export interface IDeleteComment {
   isArchive: boolean;
+  img: string[];
 }

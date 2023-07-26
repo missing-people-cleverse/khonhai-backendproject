@@ -98,18 +98,7 @@ async function main() {
   contentRouter.post(
     "/create",
     middleware.jwtMiddleware.bind(middleware),
-    handlerContent.createContent.bind(handlerContent)
-  );
-  contentRouter.post(
-    "/createimg",
-    middleware.jwtMiddleware.bind(middleware),
-    upload.single("photo"),
-    handlerContent.createContent.bind(handlerContent)
-  );
-  contentRouter.post(
-    "/createimgs",
-    middleware.jwtMiddleware.bind(middleware),
-    upload.fields([{ name: "photos", maxCount: 3 }]),
+    upload.fields([{ name: "photos", maxCount: 4 }]),
     handlerContent.createContent.bind(handlerContent)
   );
   contentRouter.get("/", handlerContent.getContents.bind(handlerContent));
@@ -129,6 +118,7 @@ async function main() {
   commentRouter.post(
     "/:id",
     middleware.jwtMiddleware.bind(middleware),
+    upload.fields([{ name: "photos", maxCount: 4 }]),
     handlerComment.createComment.bind(handlerComment)
   );
 

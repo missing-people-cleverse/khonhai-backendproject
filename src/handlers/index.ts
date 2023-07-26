@@ -96,6 +96,7 @@ export interface WithContentUpdate {
 export interface WithContentDelete {
   isArchive: boolean;
   status: string;
+  img: string[];
 }
 export interface IHandlerContent {
   createContent: HandlerFunc<JwtAuthRequest<Empty, WithContent>>;
@@ -128,6 +129,7 @@ export interface WithCommentUpdate {
 }
 export interface WithCommentDelete {
   isArchive: boolean;
+  img: string[];
 }
 
 export interface IHandlerComment {

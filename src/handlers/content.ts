@@ -10,24 +10,7 @@ import {
 import { JwtAuthRequest } from "../auth/jwt";
 import { IRepositoryContent } from "../repositories";
 import crypto from "crypto";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-// link to env
-const bucketName = (process.env.AWS_BUCKET_NAME as string) ?? "khonhai-bucket";
-const region = (process.env.AWS_BUCKET_REGION as string) ?? "ap-southeast-1";
-const accessKeyId = process.env.AWS_ACCESS_KEY as string;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY as string;
-
-const s3Client = new S3Client({
-  region,
-  credentials: {
-    accessKeyId,
-    secretAccessKey,
-  },
-});
+import { bucketName, deleteFile, region, uploadFile } from "../services/s3";
 
 export function newHandlerContent(
   repoContent: IRepositoryContent
@@ -46,10 +29,6 @@ class HandlerContent implements IHandlerContent {
     req: JwtAuthRequest<Empty, WithContent>,
     res: Response
   ): Promise<Response> {
-    // if (!req.file) {
-    //   return res.status(400).json({ message: "No file uploaded" });
-    // }
-    const userId = req.payload.id;
     const content: WithContent = {
       ...req.body,
       weight: Number(req.body.weight),
@@ -57,25 +36,72 @@ class HandlerContent implements IHandlerContent {
       ageLastSeen: Number(req.body.ageLastSeen),
     };
 
+    // const keyInfo = [
+    //   "ageLastSeen",
+    //   "dateOfBirth",
+    //   "gender",
+    //   "height",
+    //   "img",
+    //   "missingDatetime",
+    //   "missingDetail",
+    //   "name",
+    //   "nationality",
+    //   "nickname",
+    //   "place",
+    //   "province",
+    //   "remark",
+    //   "skin",
+    //   "status",
+    //   "surname",
+    //   "weight",
+    // ];
+    // console.log(keyInfo);
+
+    // const checkInfo = keyInfo.every(
+    //   (check) => content[check] !== undefined && content[check] !== null
+    // );
+    // console.log(checkInfo);
+
+    // if (!checkInfo) {
+    //   return res.status(400).json({ error: "missing information" }).end();
+    // }
+
+    if (
+      !content.ageLastSeen ||
+      !content.dateOfBirth ||
+      !content.gender ||
+      !content.height ||
+      !content.missingDatetime ||
+      !content.missingDetail ||
+      !content.name ||
+      !content.nationality ||
+      !content.nickname ||
+      !content.place ||
+      !content.province ||
+      !content.remark ||
+      !content.skin ||
+      !content.status ||
+      !content.surname ||
+      !content.weight
+    ) {
+      return res
+        .status(400)
+        .json({ error: "missing information", statusCode: 400 })
+        .end();
+    }
+    const userId = req.payload.id;
+
     const files: any = req.files;
     if (!files || files.length === 0) {
       return res.status(400).json({ message: "No files uploaded" });
     }
 
     const imgUrls: string[] = [];
-    console.log("files", files);
     for (const file of files.photos) {
-      console.log("file", file);
       const generateFileName = crypto.randomBytes(32).toString("hex");
       const img = generateFileName;
-      const uploadParams = {
-        Bucket: bucketName,
-        Body: file?.buffer,
-        Key: img,
-        ContentType: file?.mimetype,
-      };
-      s3Client.send(new PutObjectCommand(uploadParams));
       const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
+      uploadFile(file.buffer, img, file.mimetype);
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
@@ -225,6 +251,12 @@ class HandlerContent implements IHandlerContent {
         .status(400)
         .json({ error: "missing information", statusCode: 400 })
         .end();
+    }
+    for (let i = 0; i < content.img.length; i++) {
+      const url = content.img[i];
+      const parts = url.split("/");
+      const key = parts[parts.length - 1];
+      deleteFile(key);
     }
 
     return this.repo
