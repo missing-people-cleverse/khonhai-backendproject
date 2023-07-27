@@ -1,41 +1,41 @@
-name: Build and push Docker image
-run-name: "Build and push Docker image for ${{ github.event_name }} on ${{ github.ref_name }} by ${{ github.actor }}"
+# name: Build and push Docker image
+# run-name: "Build and push Docker image for ${{ github.event_name }} on ${{ github.ref_name }} by ${{ github.actor }}"
 
-on:
-  push:
-    tags: "v*"
+# on:
+#   push:
+#     tags: "v*"
 
-jobs:
-  # test:
-  #   name: Running test workflow on ubuntu-latest
-  #   uses: ./.github/workflows/test-template.yaml
-  #   with:
-  #     runs-on: ubuntu-latest
+# jobs:
+#   # test:
+#   #   name: Running test workflow on ubuntu-latest
+#   #   uses: ./.github/workflows/test-template.yaml
+#   #   with:
+#   #     runs-on: ubuntu-latest
 
-  docker:
-    # Only start this job after job `test` finished successfully
-    # needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out ${{ github.ref }} ${{ github.sha }}
-        uses: actions/checkout@v3
-      - name: Setup QEMU for Buildx
-        uses: docker/setup-qemu-action@v2
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          file: ./Dockerfile
-          build-args: |
-            FROM_REPO=${{ github.repositoryUrl }}
-            APP_VERSION=${{ github.ref_name }}
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/image_khonhai:${{ github.ref_name }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/image_khonhai:latest
+#   docker:
+#     # Only start this job after job `test` finished successfully
+#     # needs: test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checking out ${{ github.ref }} ${{ github.sha }}
+#         uses: actions/checkout@v3
+#       - name: Setup QEMU for Buildx
+#         uses: docker/setup-qemu-action@v2
+#       - name: Setup Docker Buildx
+#         uses: docker/setup-buildx-action@v2
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       - name: Build and push Docker image
+#         uses: docker/build-push-action@v4
+#         with:
+#           push: true
+#           file: ./Dockerfile
+#           build-args: |
+#             FROM_REPO=${{ github.repositoryUrl }}
+#             APP_VERSION=${{ github.ref_name }}
+#           tags: |
+#             ${{ secrets.DOCKERHUB_USERNAME }}/image_khonhai:${{ github.ref_name }}
+#             ${{ secrets.DOCKERHUB_USERNAME }}/image_khonhai:latest
