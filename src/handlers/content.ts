@@ -105,11 +105,14 @@ class HandlerContent implements IHandlerContent {
       const generateFileName = crypto.randomBytes(32).toString("hex");
       const img = generateFileName;
       const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
-      uploadFile(file.buffer, img, file.mimetype);
+      await uploadFile(file.buffer, img, file.mimetype);
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
-      return res.status(400).json({ message: "No img urls" ,statusCode: 400}).end();
+      return res
+        .status(400)
+        .json({ message: "No img urls", statusCode: 400 })
+        .end();
     }
 
     return this.repo
@@ -260,7 +263,7 @@ class HandlerContent implements IHandlerContent {
       const url = content.img[i];
       const parts = url.split("/");
       const key = parts[parts.length - 1];
-      deleteFile(key);
+      await deleteFile(key);
     }
 
     return this.repo

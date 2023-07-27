@@ -56,7 +56,7 @@ class HandlerComment {
       const generateFileName = crypto.randomBytes(32).toString("hex");
       const img = generateFileName;
       const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
-      uploadFile(file.buffer, img, file.mimetype);
+      await uploadFile(file.buffer, img, file.mimetype);
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
@@ -181,7 +181,7 @@ class HandlerComment {
       const url = comment.img[i];
       const parts = url.split("/");
       const key = parts[parts.length - 1];
-      deleteFile(key);
+      await deleteFile(key);
     }
 
     return this.repo
