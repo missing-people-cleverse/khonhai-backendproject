@@ -25,4 +25,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/github-action-demo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/github-action-khonhai:latest
