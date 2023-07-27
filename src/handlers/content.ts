@@ -109,7 +109,10 @@ class HandlerContent implements IHandlerContent {
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
-      return res.status(400).json({ message: "No img urls" ,statusCode: 400}).end();
+      return res
+        .status(400)
+        .json({ message: "No img urls", statusCode: 400 })
+        .end();
     }
 
     return this.repo
