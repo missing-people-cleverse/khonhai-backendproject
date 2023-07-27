@@ -7,7 +7,7 @@ COPY . .
 ENV DATABASE_URL="postgresql://postgres:academy@localhost:5432/project?schema=public"
 ENV PORT=8000
 # ENV POSTGRES_PASSWORD="project"
-ENV AUTH_SECRET="project"
+# ENV AUTH_SECRET="project"
 # ENV PORT=8000
 # ENV MONGODB_HOST="localhost"
 # ENV MONGODB_PORT="27017"
@@ -18,7 +18,7 @@ ENV AUTH_SECRET="project"
 # RUN pnpm install
 # RUN pnpm build
 RUN npm i
-RUN run prisma
+RUN npm run prisma
 RUN npm run build
 
 

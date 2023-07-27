@@ -5,10 +5,6 @@ on:
     tag: "v*"
 
 jobs:
-  # test:
-  #   uses: ./.github/workflows/test.yaml
-  #   name: Test app code before building Docker image
-
   docker:
     name: Test TypeScript code for event ${{ github.event_name }} on ${{ github.ref }}
     needs: test
