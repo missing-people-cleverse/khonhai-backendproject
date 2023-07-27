@@ -92,8 +92,12 @@ class HandlerContent implements IHandlerContent {
     const userId = req.payload.id;
 
     const files: any = req.files;
+    console.log("files", files);
     if (!files || files.length === 0) {
-      return res.status(400).json({ message: "No files uploaded" }).end();
+      return res
+        .status(400)
+        .json({ message: "No files uploaded", statusCode: 400 })
+        .end();
     }
 
     const imgUrls: string[] = [];
@@ -105,7 +109,7 @@ class HandlerContent implements IHandlerContent {
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
-      return res.status(400).json({ message: "No img urls" }).end();
+      return res.status(400).json({ message: "No img urls" ,statusCode: 400}).end();
     }
 
     return this.repo
