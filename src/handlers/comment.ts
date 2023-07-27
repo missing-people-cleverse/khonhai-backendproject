@@ -45,7 +45,7 @@ class HandlerComment {
 
     const files: any = req.files;
     if (!files || files.length === 0) {
-      return res.status(400).json({ message: "No files uploaded" });
+      return res.status(400).json({ message: "No files uploaded" }).end();
     }
 
     const imgUrls: string[] = [];
@@ -57,7 +57,7 @@ class HandlerComment {
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
-      return res.status(400).json({ message: "No img urls" });
+      return res.status(400).json({ message: "No img urls" }).end();
     }
 
     if (isNaN(contentId)) {
