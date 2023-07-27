@@ -3,7 +3,7 @@ run-name: "Build and push Docker image for ${{ github.event_name }} on ${{ githu
 
 on:
   push:
-    tags: "**"
+    tags: "v*"
 
 jobs:
   # test:
