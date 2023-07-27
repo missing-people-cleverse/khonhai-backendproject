@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  app:
+    image: image_khonhai
+    container_name: container_khonhai
+    ports:
+      - "8000:8000" # Adjust the port number as per your app's configuration
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      AWS_BUCKET_NAME: khonhai-bucket
+      AWS_BUCKET_REGION: ap-southeast-1
+      AWS_ACCESS_KEY: AKIAYXEDKVHLKJ2RHJHX
+      AWS_SECRET_ACCESS_KEY: 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
+
+  redis:
+    image: redis:latest
+    container_name: redis_container_khonhai
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container_khonhai
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: testimg
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
