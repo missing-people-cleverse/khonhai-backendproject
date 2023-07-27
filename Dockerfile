@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 ENV DATABASE_URL="postgresql://postgres:academy@localhost:5432/project?schema=public"
+
 ENV PORT=8000
 # ENV POSTGRES_PASSWORD="project"
 # ENV AUTH_SECRET="project"
