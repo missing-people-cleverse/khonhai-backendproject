@@ -1,4 +1,4 @@
-name: Test workflows
+name: Final Project workflows
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   docker:
-    name: Test TypeScript code for event ${{ github.event_name }} on ${{ github.ref }}
+    name: Build docker image for ${{ github.event_name }} on ${{ github.ref }}
     # needs: test
     runs-on: ubuntu-latest
     steps:
