@@ -105,7 +105,13 @@ class HandlerContent implements IHandlerContent {
       const generateFileName = crypto.randomBytes(32).toString("hex");
       const img = generateFileName;
       const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
-      await uploadFile(file.buffer, img, file.mimetype);
+      
+      try {
+        await uploadFile(file.buffer, img, file.mimetype);
+      } catch(err) {
+        console.error(`error upload s3 assets: ${err}`)
+        return res.status(500).json({error: `failed to remove image`}).end()
+      }
       imgUrls.push(imgUrl);
     }
     if (!imgUrls || imgUrls.length === 0) {
@@ -266,6 +272,7 @@ class HandlerContent implements IHandlerContent {
       try {
         await deleteFile(key);
       } catch(err) {
+        console.error(`error deleting s3 assets: ${err}`)
         return res.status(500).json({error: `failed to remove image`}).end()
       }
     }
