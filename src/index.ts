@@ -20,6 +20,7 @@ import multer from "multer";
 async function main() {
   const db = new PrismaClient();
   const redis = createClient<any, any, any>({url: process.env.REDIS_URL});
+  let useCors = process.env.CORS || "no"
 
   try {
     await redis.connect();
@@ -56,8 +57,12 @@ async function main() {
   const contentRouter = express.Router();
   const commentRouter = express.Router();
 
-  var cors = require("cors");
-  server.use(cors());
+  useCors = useCors.toUpperCase();
+  if (useCors.includes("Y")) {
+    console.log(`using CORS due to ENV: ${process.env.CORS}`)
+    const cors = require("cors");
+    server.use(cors());
+  }
 
   server.use(express.json());
   server.use("/user", userRouter);

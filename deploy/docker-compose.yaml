@@ -1,12 +1,9 @@
+volumes:
+  compose-volume:
+    external: true
+    name: postgres-volume
+
 services:
-
-
-#   mongodb:
-#     image: mongo
-#     environment:
-#       MONGO_INITDB_ROOT_USERNAME: gigi
-#       MONGO_INITDB_ROOT_PASSWORD: taichi
-
   app:
     # Build image nodeserver from Dockerfile in GitHub repo
     image: github-action-khonhai
@@ -15,11 +12,12 @@ services:
       context: ..
     environment:
       REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://postgres:academy@postgres:5432/project?schema=public
+      DATABASE_URL: postgresql://postgres:academy@postgres:5432/postgres?schema=public
       AWS_BUCKET_NAME: khonhai-bucket
       AWS_BUCKET_REGION: ap-southeast-1
       AWS_ACCESS_KEY: AKIAYXEDKVHLOVTISAFL
       AWS_SECRET_ACCESS_KEY: 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
+      CORS: false
     ports:
       - "8000:8000"
     
@@ -28,8 +26,8 @@ services:
 
   postgres:
     image: postgres:latest
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=academy
+    volumes:
+      - "compose-volume:/var/lib/postgresql"
