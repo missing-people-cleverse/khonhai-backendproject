@@ -11,7 +11,7 @@ import {
 } from ".";
 import { Response } from "express";
 import crypto from "crypto";
-import { bucketName, deleteFile, region, uploadFile } from "../services/s3";
+import { bucketName, region, uploadFile } from "../services/s3";
 
 export function newHandlerComment(
   repoComment: IRepositoryComment
@@ -182,18 +182,18 @@ class HandlerComment {
         .end();
     }
 
-    for (let i = 0; i < comment.img.length; i++) {
-      const url = comment.img[i];
-      const parts = url.split("/");
-      const key = parts[parts.length - 1];
+    // for (let i = 0; i < comment.img.length; i++) {
+    //   const url = comment.img[i];
+    //   const parts = url.split("/");
+    //   const key = parts[parts.length - 1];
 
-      try {
-        await deleteFile(key);
-      } catch(err) {
-        console.error(`error deleting s3 assets: ${err}`)
-        return res.status(500).json({error: `failed to remove image`}).end()
-      }
-    }
+    //   try {
+    //     await deleteFile(key);
+    //   } catch(err) {
+    //     console.error(`error deleting s3 assets: ${err}`)
+    //     return res.status(500).json({error: `failed to remove image`}).end()
+    //   }
+    // }
 
     return this.repo
       .deleteComment(id, { ...comment })

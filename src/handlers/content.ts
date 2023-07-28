@@ -10,7 +10,7 @@ import {
 import { JwtAuthRequest } from "../auth/jwt";
 import { IRepositoryContent } from "../repositories";
 import crypto from "crypto";
-import { bucketName, deleteFile, region, uploadFile } from "../services/s3";
+import { bucketName, region, uploadFile } from "../services/s3";
 
 export function newHandlerContent(
   repoContent: IRepositoryContent
@@ -265,17 +265,17 @@ class HandlerContent implements IHandlerContent {
         .json({ error: "missing information", statusCode: 400 })
         .end();
     }
-    for (let i = 0; i < content.img.length; i++) {
-      const url = content.img[i];
-      const parts = url.split("/");
-      const key = parts[parts.length - 1];
-      try {
-        await deleteFile(key);
-      } catch(err) {
-        console.error(`error deleting s3 assets: ${err}`)
-        return res.status(500).json({error: `failed to remove image`}).end()
-      }
-    }
+    // for (let i = 0; i < content.img.length; i++) {
+    //   const url = content.img[i];
+    //   const parts = url.split("/");
+    //   const key = parts[parts.length - 1];
+    //   try {
+    //     await deleteFile(key);
+    //   } catch(err) {
+    //     console.error(`error deleting s3 assets: ${err}`)
+    //     return res.status(500).json({error: `failed to remove image`}).end()
+    //   }
+    // }
 
     return this.repo
       .deleteContent(id, { ...content })
