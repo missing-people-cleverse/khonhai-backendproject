@@ -1,4 +1,6 @@
-# services:
+services:
+
+
 #   mongodb:
 #     image: mongo
 #     environment:
@@ -13,15 +15,15 @@
       context: ..
     environment:
       REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://postgres:academy@localhost:5432/project?schema=public
+      DATABASE_URL: postgresql://postgres:academy@postgres:5432/project?schema=public
     ports:
       - "8000:8000"
-
+    
   redis:
-    image: redis:7.0
+    image: redis:latest
 
   postgres:
-    image: postgres:15
+    image: postgres:latest
     ports:
       - 5432:5432
     environment:
