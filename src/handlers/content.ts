@@ -9,6 +9,8 @@ import {
 } from ".";
 import { JwtAuthRequest } from "../auth/jwt";
 import { IRepositoryContent } from "../repositories";
+import crypto from "crypto";
+import { bucketName, deleteFile, region, uploadFile } from "../services/s3";
 
 export function newHandlerContent(
   repoContent: IRepositoryContent
@@ -27,7 +29,12 @@ class HandlerContent implements IHandlerContent {
     req: JwtAuthRequest<Empty, WithContent>,
     res: Response
   ): Promise<Response> {
-    const content: WithContent = req.body;
+    const content: WithContent = {
+      ...req.body,
+      weight: Number(req.body.weight),
+      height: Number(req.body.height),
+      ageLastSeen: Number(req.body.ageLastSeen),
+    };
 
     // const keyInfo = [
     //   "ageLastSeen",
@@ -64,7 +71,6 @@ class HandlerContent implements IHandlerContent {
       !content.dateOfBirth ||
       !content.gender ||
       !content.height ||
-      !content.img ||
       !content.missingDatetime ||
       !content.missingDetail ||
       !content.name ||
@@ -83,11 +89,34 @@ class HandlerContent implements IHandlerContent {
         .json({ error: "missing information", statusCode: 400 })
         .end();
     }
-
     const userId = req.payload.id;
 
+    const files: any = req.files;
+    console.log("files", files);
+    if (!files || files.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No files uploaded", statusCode: 400 })
+        .end();
+    }
+
+    const imgUrls: string[] = [];
+    for (const file of files.photos) {
+      const generateFileName = crypto.randomBytes(32).toString("hex");
+      const img = generateFileName;
+      const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
+      await uploadFile(file.buffer, img, file.mimetype);
+      imgUrls.push(imgUrl);
+    }
+    if (!imgUrls || imgUrls.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No img urls", statusCode: 400 })
+        .end();
+    }
+
     return this.repo
-      .createContent({ ...content, userId })
+      .createContent({ ...content, userId, img: imgUrls })
       .then((content) => res.status(201).json(content).end())
       .catch((err) => {
         console.error(`failed to create content: ${err}`);
@@ -229,6 +258,12 @@ class HandlerContent implements IHandlerContent {
         .status(400)
         .json({ error: "missing information", statusCode: 400 })
         .end();
+    }
+    for (let i = 0; i < content.img.length; i++) {
+      const url = content.img[i];
+      const parts = url.split("/");
+      const key = parts[parts.length - 1];
+      await deleteFile(key);
     }
 
     return this.repo

@@ -10,6 +10,8 @@ import {
   WithContentId,
 } from ".";
 import { Response } from "express";
+import crypto from "crypto";
+import { bucketName, deleteFile, region, uploadFile } from "../services/s3";
 
 export function newHandlerComment(
   repoComment: IRepositoryComment
@@ -31,12 +33,7 @@ class HandlerComment {
     const comment: WithComment = req.body;
 
     //check what requird
-    if (
-      !comment.foundDatetime ||
-      !comment.foundDetail ||
-      !comment.foundPlace ||
-      !comment.img
-    ) {
+    if (!comment.foundDatetime || !comment.foundDetail || !comment.foundPlace) {
       return res
         .status(400)
         .json({ error: "missing information", statusCode: 400 })
@@ -46,6 +43,29 @@ class HandlerComment {
     const userId = req.payload.id;
     const contentId = Number(req.params.id);
 
+    const files: any = req.files;
+    if (!files || files.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No files uploaded", statusCode: 400 })
+        .end();
+    }
+
+    const imgUrls: string[] = [];
+    for (const file of files.photos) {
+      const generateFileName = crypto.randomBytes(32).toString("hex");
+      const img = generateFileName;
+      const imgUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${img}`;
+      await uploadFile(file.buffer, img, file.mimetype);
+      imgUrls.push(imgUrl);
+    }
+    if (!imgUrls || imgUrls.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No img urls", statusCode: 400 })
+        .end();
+    }
+
     if (isNaN(contentId)) {
       return res
         .status(400)
@@ -54,7 +74,7 @@ class HandlerComment {
     }
 
     return this.repo
-      .createComment({ ...comment, userId, contentId })
+      .createComment({ ...comment, userId, contentId, img: imgUrls })
       .then((comment) => res.status(201).json(comment).end())
       .catch((err) => {
         console.error(`failed to create comment: ${err}`);
@@ -155,6 +175,13 @@ class HandlerComment {
         .status(400)
         .json({ error: "missing information", statusCode: 400 })
         .end();
+    }
+
+    for (let i = 0; i < comment.img.length; i++) {
+      const url = comment.img[i];
+      const parts = url.split("/");
+      const key = parts[parts.length - 1];
+      await deleteFile(key);
     }
 
     return this.repo
