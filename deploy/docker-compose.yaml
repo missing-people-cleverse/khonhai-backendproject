@@ -1,0 +1,31 @@
+services:
+
+
+#   mongodb:
+#     image: mongo
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: gigi
+#       MONGO_INITDB_ROOT_PASSWORD: taichi
+
+  app:
+    # Build image nodeserver from Dockerfile in GitHub repo
+    image: github-action-khonhai
+    build:
+      # context: https://github.com/CleverseAcademy/nodejs-cicd.git#develop
+      context: ..
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:academy@postgres:5432/project?schema=public
+    ports:
+      - "8000:8000"
+    
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=academy
