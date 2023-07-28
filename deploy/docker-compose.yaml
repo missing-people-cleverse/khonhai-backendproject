@@ -17,7 +17,7 @@ services:
       AWS_BUCKET_REGION: ap-southeast-1
       AWS_ACCESS_KEY: AKIAYXEDKVHLOVTISAFL
       AWS_SECRET_ACCESS_KEY: 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
-      CORS: false
+      CORS: "no"
     ports:
       - "8000:8000"
     
