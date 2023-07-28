@@ -263,7 +263,11 @@ class HandlerContent implements IHandlerContent {
       const url = content.img[i];
       const parts = url.split("/");
       const key = parts[parts.length - 1];
-      await deleteFile(key);
+      try {
+        await deleteFile(key);
+      } catch(err) {
+        return res.status(500).json({error: `failed to remove image`}).end()
+      }
     }
 
     return this.repo
