@@ -19,17 +19,17 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Content" (
     "id" SERIAL NOT NULL,
-    "usedId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "isArchive" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT NOT NULL,
     "surname" TEXT NOT NULL,
     "nickname" TEXT NOT NULL,
-    "img" TEXT NOT NULL,
+    "img" TEXT[],
     "nationality" TEXT NOT NULL,
     "ageLastSeen" INTEGER NOT NULL,
-    "dateOfBirth" TIMESTAMP(3) NOT NULL,
+    "dateOfBirth" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "weight" INTEGER NOT NULL,
     "height" INTEGER NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE "Content" (
     "status" TEXT NOT NULL,
     "province" TEXT NOT NULL,
     "place" TEXT NOT NULL,
-    "missingDatetime" TIMESTAMP(3) NOT NULL,
+    "missingDatetime" TEXT NOT NULL,
     "missingDetail" TEXT NOT NULL,
 
     CONSTRAINT "Content_pkey" PRIMARY KEY ("id")
@@ -46,18 +46,18 @@ CREATE TABLE "Content" (
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "comment_id" SERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "contentId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "foundPlace" TEXT NOT NULL,
-    "foundDatetime" TIMESTAMP(3) NOT NULL,
+    "foundDatetime" TEXT NOT NULL,
     "foundDetail" TEXT NOT NULL,
-    "img" TEXT NOT NULL,
+    "img" TEXT[],
     "isArchive" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "Comment_pkey" PRIMARY KEY ("comment_id")
+    CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -70,7 +70,7 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_phoneNumber_key" ON "User"("phoneNumber");
 
 -- AddForeignKey
-ALTER TABLE "Content" ADD CONSTRAINT "Content_usedId_fkey" FOREIGN KEY ("usedId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Content" ADD CONSTRAINT "Content_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

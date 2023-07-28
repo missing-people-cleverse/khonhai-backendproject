@@ -56,7 +56,7 @@ export interface WithContent {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -77,7 +77,7 @@ export interface WithContentUpdate {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -96,6 +96,7 @@ export interface WithContentUpdate {
 export interface WithContentDelete {
   isArchive: boolean;
   status: string;
+  img: string[];
 }
 export interface IHandlerContent {
   createContent: HandlerFunc<JwtAuthRequest<Empty, WithContent>>;
@@ -111,7 +112,7 @@ export interface WithComment {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 
@@ -123,11 +124,12 @@ export interface WithCommentUpdate {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 export interface WithCommentDelete {
   isArchive: boolean;
+  img: string[];
 }
 
 export interface IHandlerComment {

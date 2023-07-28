@@ -22,7 +22,7 @@ export interface ICreateContent {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -47,7 +47,7 @@ export interface IUpdateContent {
   name: string;
   surname: string;
   nickname: string;
-  img: string;
+  img: string[];
   nationality: string;
   ageLastSeen: number;
   dateOfBirth: string;
@@ -69,7 +69,7 @@ export interface ICreateComment {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 
@@ -81,32 +81,17 @@ export interface IUpdateComment {
   foundPlace: string;
   foundDatetime: string;
   foundDetail: string;
-  img: string;
+  img: string[];
   isArchive: boolean;
 }
 
 export interface IDeleteContent {
   isArchive: boolean;
   status: string;
+  img: string[];
 }
 
 export interface IDeleteComment {
   isArchive: boolean;
+  img: string[];
 }
-
-// for s3
-import dotenv from "dotenv";
-
-dotenv.config();
-
-export const config: {
-  port: number;
-  aws_access_key_id: string;
-  aws_secret_access_key: string;
-  bucket_name: string;
-} = {
-  port: Number(process.env.PORT) ?? 8000,
-  aws_access_key_id: process.env.AWS_ACCESS_KEY_ID ?? " ",
-  aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY ?? "",
-  bucket_name: process.env.BUCKET_NAME ?? "khonhai-bucket",
-};

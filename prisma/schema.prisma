@@ -40,7 +40,7 @@ model Content {
   name String
   surname String
   nickname String
-  img String
+  img String[]
   nationality String 
   ageLastSeen Int
   dateOfBirth String
@@ -69,7 +69,7 @@ model Comment {
   foundPlace String
   foundDatetime String
   foundDetail String
-  img String
+  img String[]
   isArchive Boolean @default(false)
 }
 
