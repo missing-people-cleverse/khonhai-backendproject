@@ -1,22 +1,19 @@
-services:
-  mongodb:
-    image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: gigi
-      MONGO_INITDB_ROOT_PASSWORD: taichi
+# services:
+#   mongodb:
+#     image: mongo
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: gigi
+#       MONGO_INITDB_ROOT_PASSWORD: taichi
 
   app:
     # Build image nodeserver from Dockerfile in GitHub repo
-    image: nodejs-cicd
+    image: github-action-khonhai
     build:
       # context: https://github.com/CleverseAcademy/nodejs-cicd.git#develop
       context: ..
     environment:
-      MONGODB_USERNAME: gigi
-      MONGODB_PASSWORD: taichi
-      MONGODB_HOST: mongodb
       REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://pguser:pgpassword@postgres:5432
+      DATABASE_URL: postgresql://postgres:academy@localhost:5432/project?schema=public
     ports:
       - "8000:8000"
 
@@ -28,5 +25,5 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=pguser
-      - POSTGRES_PASSWORD=pgpassword
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=academy
