@@ -177,12 +177,12 @@ class HandlerComment {
         .end();
     }
 
-    for (let i = 0; i < comment.img.length; i++) {
-      const url = comment.img[i];
-      const parts = url.split("/");
-      const key = parts[parts.length - 1];
-      await deleteFile(key);
-    }
+    // for (let i = 0; i < comment.img.length; i++) {
+    //   const url = comment.img[i];
+    //   const parts = url.split("/");
+    //   const key = parts[parts.length - 1];
+    //   await deleteFile(key);
+    // }
 
     return this.repo
       .deleteComment(id, { ...comment })
