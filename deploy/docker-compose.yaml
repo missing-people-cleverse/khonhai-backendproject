@@ -5,10 +5,8 @@ volumes:
 
 services:
   app:
-    # Build image nodeserver from Dockerfile in GitHub repo
     image: github-action-khonhai
     build:
-      # context: https://github.com/CleverseAcademy/nodejs-cicd.git#develop
       context: ..
     environment:
       REDIS_URL: redis://redis:6379
