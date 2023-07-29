@@ -107,7 +107,6 @@ export interface IHandlerContent {
 }
 
 //Comment
-
 export interface WithComment {
   foundPlace: string;
   foundDatetime: string;
