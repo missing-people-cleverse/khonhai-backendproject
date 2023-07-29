@@ -12,7 +12,7 @@ export function newRepositoryContent(db: PrismaClient): IRepositoryContent {
 }
 
 class RepositoryContent implements IRepositoryContent {
-  db: PrismaClient;
+  private db: PrismaClient;
 
   constructor(db: PrismaClient) {
     this.db = db;
