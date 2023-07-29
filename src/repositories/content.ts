@@ -101,13 +101,6 @@ class RepositoryContent implements IRepositoryContent {
       .catch((err) => Promise.reject(`failed to get content ${id}: ${err}`));
   }
 
-  // id Int @id @default(autoincrement())
-  // contentId Int
-  // content Content @relation(fields: [contentId], references: [id])
-  // userId String
-  // user User @relation(fields: [userId], references: [id])
-
-  //FE make condition to show Edit button
   async updateContent(id: number, content: IUpdateContent): Promise<IContent> {
     return await this.db.content.update({
       where: { id },

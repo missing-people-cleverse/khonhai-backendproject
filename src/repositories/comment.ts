@@ -12,7 +12,7 @@ export function newRepositoryComment(db: PrismaClient): IRepositoryComment {
 }
 
 class RepositoryComment implements IRepositoryComment {
-  db: PrismaClient;
+  private db: PrismaClient;
 
   constructor(db: PrismaClient) {
     this.db = db;
