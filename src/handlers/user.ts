@@ -40,7 +40,6 @@ class HandlerUser implements IHandlerUser {
     this.repoBlacklistUnique = repoBlacklistUnique;
   }
 
-  //check unique Username
   async checkUsername(
     req: AppRequest<Empty, WithUsernameCheck>,
     res: Response
@@ -63,7 +62,6 @@ class HandlerUser implements IHandlerUser {
       );
   }
 
-  //check unique Email
   async checkEmail(
     req: AppRequest<Empty, WithEmailCheck>,
     res: Response
@@ -86,7 +84,6 @@ class HandlerUser implements IHandlerUser {
       );
   }
 
-  //check unique phoneNumber
   async checkPhoneNumber(
     req: AppRequest<Empty, WithPhoneNumberCheck>,
     res: Response
@@ -172,8 +169,8 @@ class HandlerUser implements IHandlerUser {
 
     if (!username || !password) {
       return res
-        .status(500)
-        .json({ error: "missing username or password" })
+        .status(400)
+        .json({ error: "missing username or password", statusCode: 400  })
         .end();
     }
     return this.repo
