@@ -126,7 +126,6 @@ async function main() {
     upload.fields([{ name: "photos", maxCount: 4 }]),
     handlerComment.createComment.bind(handlerComment)
   );
-
   commentRouter.patch(
     "/edit/:id",
     middleware.jwtMiddleware.bind(middleware),

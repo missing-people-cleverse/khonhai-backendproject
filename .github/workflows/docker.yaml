@@ -7,7 +7,6 @@ on:
 jobs:
   docker:
     name: Build docker image for ${{ github.event_name }} on ${{ github.ref }}
-    # needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
