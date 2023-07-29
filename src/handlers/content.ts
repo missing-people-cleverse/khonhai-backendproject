@@ -36,36 +36,6 @@ class HandlerContent implements IHandlerContent {
       ageLastSeen: Number(req.body.ageLastSeen),
     };
 
-    // const keyInfo = [
-    //   "ageLastSeen",
-    //   "dateOfBirth",
-    //   "gender",
-    //   "height",
-    //   "img",
-    //   "missingDatetime",
-    //   "missingDetail",
-    //   "name",
-    //   "nationality",
-    //   "nickname",
-    //   "place",
-    //   "province",
-    //   "remark",
-    //   "skin",
-    //   "status",
-    //   "surname",
-    //   "weight",
-    // ];
-    // console.log(keyInfo);
-
-    // const checkInfo = keyInfo.every(
-    //   (check) => content[check] !== undefined && content[check] !== null
-    // );
-    // console.log(checkInfo);
-
-    // if (!checkInfo) {
-    //   return res.status(400).json({ error: "missing information" }).end();
-    // }
-
     if (
       !content.ageLastSeen ||
       !content.dateOfBirth ||
@@ -92,7 +62,6 @@ class HandlerContent implements IHandlerContent {
     const userId = req.payload.id;
 
     const files: any = req.files;
-    console.log("files", files);
     if (!files || files.length === 0) {
       return res
         .status(400)
@@ -265,17 +234,6 @@ class HandlerContent implements IHandlerContent {
         .json({ error: "missing information", statusCode: 400 })
         .end();
     }
-    // for (let i = 0; i < content.img.length; i++) {
-    //   const url = content.img[i];
-    //   const parts = url.split("/");
-    //   const key = parts[parts.length - 1];
-    //   try {
-    //     await deleteFile(key);
-    //   } catch(err) {
-    //     console.error(`error deleting s3 assets: ${err}`)
-    //     return res.status(500).json({error: `failed to remove image`}).end()
-    //   }
-    // }
 
     return this.repo
       .deleteContent(id, { ...content })
